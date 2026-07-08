@@ -1,0 +1,196 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  APP_NAME: ai-survey-system
+  APP_PORT: "3001"
+  REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+  REGISTRY_NAMESPACE: chmjk67
+  DOMAIN: chmjk67.top
+  ECS_IP: 39.105.86.184
+  APP_ENVS: |
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY_URL }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/${{ env.APP_NAME }}:latest
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/${{ env.APP_NAME }}:${{ github.sha }}
+
+      # Step A: 尝试 SSH 部署
+      - name: Deploy via SSH
+        id: ssh-deploy
+        continue-on-error: true
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          timeout: 30s
+          script: |
+            /opt/app/scripts/deploy.sh \
+              --app-name ${{ env.APP_NAME }} \
+              --image ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/${{ env.APP_NAME }}:${{ github.sha }} \
+              --port ${{ env.APP_PORT }} \
+              --internal-port 80 \
+              --health-path /
+
+      # Step B: SSH 失败则走 RunCommand API 降级
+      - name: Deploy via RunCommand API (fallback)
+        if: steps.ssh-deploy.outcome == 'failure'
+        run: |
+          python3 -c "
+          import json, hmac, hashlib, base64, urllib.request, urllib.parse, uuid
+          from datetime import datetime, timezone, time
+          AK_ID='${{ secrets.ALIYUN_ACCESS_KEY_ID }}'
+          AK_SECRET='${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}'
+          def sign(p):
+              sp=sorted(p.items()); Q=urllib.parse.quote
+              q='&'.join(Q(k,'')+'='+Q(v,'') for k,v in sp)
+              s='GET&'+Q('/','')+'&'+Q(q,'')
+              sig=base64.b64encode(hmac.new((AK_SECRET+'&').encode(),s.encode(),hashlib.sha1).digest()).decode()
+              return q+'&Signature='+Q(sig,'')
+          def run_cmd(instance_id, cmd, timeout=120):
+              b64=base64.b64encode(cmd.encode()).decode()
+              p={'Action':'RunCommand','RegionId':'cn-beijing','InstanceId.1':instance_id,'Type':'RunShellScript','CommandContent':b64,'ContentEncoding':'Base64','Timeout':str(timeout),'Format':'JSON','Version':'2014-05-26','AccessKeyId':AK_ID,'SignatureMethod':'HMAC-SHA1','SignatureVersion':'1.0','Timestamp':datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),'SignatureNonce':str(uuid.uuid4())}
+              r=urllib.request.urlopen('https://ecs.aliyuncs.com/?'+sign(p),timeout=10)
+              iid=json.loads(r.read())['InvokeId']
+              for _ in range(timeout//3):
+                  time.sleep(3)
+                  p2={'Action':'DescribeInvocationResults','RegionId':'cn-beijing','InvokeId':iid,'Format':'JSON','Version':'2014-05-26','AccessKeyId':AK_ID,'SignatureMethod':'HMAC-SHA1','SignatureVersion':'1.0','Timestamp':datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),'SignatureNonce':str(uuid.uuid4())}
+                  r2=urllib.request.urlopen('https://ecs.aliyuncs.com/?'+sign(p2),timeout=10)
+                  for res in json.loads(r2.read()).get('Invocation',{}).get('InvocationResults',{}).get('InvocationResult',[]):
+                      if res.get('InvocationStatus') in ('Success','Failed','Finished'):
+                          o=res.get('Output','') or ''
+                          print(base64.b64decode(o).decode('utf-8','replace') if o else res['InvocationStatus'])
+                          return
+          instance_id='i-2zeee6djmc1qhwptmz1l'
+          deploy_cmd=f'''docker login --username=${{ secrets.REGISTRY_USERNAME }} --password=${{ secrets.REGISTRY_PASSWORD }} ${{ env.REGISTRY_URL }}
+          docker pull ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/${{ env.APP_NAME }}:latest
+          docker stop ${{ env.APP_NAME }}_app 2>/dev/null; docker rm ${{ env.APP_NAME }}_app 2>/dev/null
+          docker run -d --name ${{ env.APP_NAME }}_app -p ${{ env.APP_PORT }}:80 --restart always --network caddy-net -v ${{ env.APP_NAME }}_data:/app/data ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/${{ env.APP_NAME }}:latest
+          sleep 3; curl -sf http://127.0.0.1:${{ env.APP_PORT }}/ && echo HEALTH_OK || echo HEALTH_FAIL'''
+          run_cmd(instance_id, deploy_cmd)
+          "
+
+      # 添加 Caddy 路由（两个域名）
+      - name: Configure Caddy routes
+        if: steps.ssh-deploy.outcome == 'failure'
+        run: |
+          python3 -c "
+          import json, hmac, hashlib, base64, urllib.request, urllib.parse, uuid
+          from datetime import datetime, timezone, time
+          AK_ID='${{ secrets.ALIYUN_ACCESS_KEY_ID }}'
+          AK_SECRET='${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}'
+          def sign(p):
+              sp=sorted(p.items()); Q=urllib.parse.quote
+              q='&'.join(Q(k,'')+'='+Q(v,'') for k,v in sp)
+              s='GET&'+Q('/','')+'&'+Q(q,'')
+              sig=base64.b64encode(hmac.new((AK_SECRET+'&').encode(),s.encode(),hashlib.sha1).digest()).decode()
+              return q+'&Signature='+Q(sig,'')
+          def run_cmd(instance_id, cmd, timeout=60):
+              b64=base64.b64encode(cmd.encode()).decode()
+              p={'Action':'RunCommand','RegionId':'cn-beijing','InstanceId.1':instance_id,'Type':'RunShellScript','CommandContent':b64,'ContentEncoding':'Base64','Timeout':str(timeout),'Format':'JSON','Version':'2014-05-26','AccessKeyId':AK_ID,'SignatureMethod':'HMAC-SHA1','SignatureVersion':'1.0','Timestamp':datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),'SignatureNonce':str(uuid.uuid4())}
+              r=urllib.request.urlopen('https://ecs.aliyuncs.com/?'+sign(p),timeout=10)
+              iid=json.loads(r.read())['InvokeId']
+              for _ in range(timeout//3):
+                  time.sleep(3)
+                  p2={'Action':'DescribeInvocationResults','RegionId':'cn-beijing','InvokeId':iid,'Format':'JSON','Version':'2014-05-26','AccessKeyId':AK_ID,'SignatureMethod':'HMAC-SHA1','SignatureVersion':'1.0','Timestamp':datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),'SignatureNonce':str(uuid.uuid4())}
+                  r2=urllib.request.urlopen('https://ecs.aliyuncs.com/?'+sign(p2),timeout=10)
+                  for res in json.loads(r2.read()).get('Invocation',{}).get('InvocationResults',{}).get('InvocationResult',[]):
+                      if res.get('InvocationStatus') in ('Success','Failed','Finished'):
+                          o=res.get('Output','') or ''
+                          print(base64.b64decode(o).decode('utf-8','replace') if o else res['InvocationStatus'])
+                          return
+          instance_id='i-2zeee6djmc1qhwptmz1l'
+          caddy_cmd='''grep -q \"questionnaire.chmjk67.top\" /opt/app/Caddyfile || (cat >> /opt/app/Caddyfile << 'EOF'
+          questionnaire.chmjk67.top {
+            reverse_proxy ai-survey-system_app:80
+          }
+          EOF
+          )
+          grep -q \"questionnaire-admin.chmjk67.top\" /opt/app/Caddyfile || (cat >> /opt/app/Caddyfile << 'EOF2'
+          questionnaire-admin.chmjk67.top {
+            reverse_proxy ai-survey-system_app:80
+          }
+          EOF2
+          )
+          docker exec caddy caddy reload --config /etc/caddy/Caddyfile
+          echo CADDY_ROUTES_OK'''
+          run_cmd(instance_id, caddy_cmd)
+          "
+
+      # DNS 记录
+      - name: Ensure DNS A records
+        run: |
+          python3 -c "
+import json, hmac, hashlib, base64, urllib.request, urllib.parse, uuid
+from datetime import datetime, timezone
+
+AK_ID='${{ secrets.ALIYUN_ACCESS_KEY_ID }}'
+AK_SECRET='${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}'
+
+def sign(p):
+    sp = sorted(p.items()); Q = urllib.parse.quote
+    q = '&'.join(Q(k,'')+'='+Q(v,'') for k,v in sp)
+    s = 'GET&' + Q('/','') + '&' + Q(q,'')
+    sig = base64.b64encode(hmac.new((AK_SECRET+'&').encode(), s.encode(), hashlib.sha1).digest()).decode()
+    return q + '&Signature=' + Q(sig,'')
+
+def add_dns(rr):
+    try:
+        p = {
+            'Action': 'AddDomainRecord',
+            'DomainName': '${{ env.DOMAIN }}',
+            'RR': rr,
+            'Type': 'A',
+            'Value': '${{ env.ECS_IP }}',
+            'Format': 'JSON',
+            'Version': '2015-01-09',
+            'AccessKeyId': AK_ID,
+            'SignatureMethod': 'HMAC-SHA1',
+            'SignatureVersion': '1.0',
+            'Timestamp': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+            'SignatureNonce': str(uuid.uuid4()),
+        }
+        url = 'https://dns.aliyuncs.com/?' + sign(p)
+        with urllib.request.urlopen(url, timeout=10) as r:
+            result = json.loads(r.read())
+            if 'RecordId' in result:
+                print(f'{rr}: DNS added (RecordId={result[\"RecordId\"]})')
+            else:
+                print(f'{rr}: {result}')
+    except Exception as e:
+        print(f'{rr}: error - {e}')
+
+for rr in ['questionnaire', 'questionnaire-admin']:
+    add_dns(rr)
+"
+
+      # 验证部署
+      - name: Verify deployment
+        run: |
+          sleep 15
+          echo "=== 验证 IP:端口 ==="
+          curl -sf "http://${ECS_IP}:${APP_PORT}/" && echo "HTTP OK" || echo "HTTP FAIL"
+          echo "=== 验证 questionnaire.chmjk67.top ==="
+          curl -skf "https://questionnaire.chmjk67.top/" && echo "HTTPS OK" || echo "HTTPS FAIL (DNS propagation may take minutes)"
+          echo "=== 验证 questionnaire-admin.chmjk67.top ==="
+          curl -skf "https://questionnaire-admin.chmjk67.top/admin" && echo "HTTPS OK" || echo "HTTPS FAIL (DNS propagation may take minutes)"
