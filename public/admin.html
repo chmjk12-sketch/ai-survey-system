@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>问卷管理后台</title>
+  <title>报名管理后台</title>
   <style>
     :root {
       --bg: #f0f1f5;
@@ -356,9 +356,9 @@
 <body>
 
 <div class="topbar">
-  <h1><span class="dot"></span> 问卷管理后台</h1>
+  <h1><span class="dot"></span> 报名管理后台</h1>
   <div class="actions">
-    <a href="/" class="btn btn-outline" target="_blank">打开问卷</a>
+    <a href="/" class="btn btn-outline" target="_blank">打开报名表</a>
     <button class="btn btn-outline" onclick="exportCSV()">导出 CSV</button>
     <button class="btn btn-primary" onclick="loadData()">刷新数据</button>
   </div>
@@ -485,7 +485,7 @@
   <!-- 数据表 -->
   <div class="table-card">
     <div class="table-header">
-      <h3>问卷明细</h3>
+      <h3>报名明细</h3>
       <span style="font-size:0.78rem;color:var(--muted)" id="tableInfo"></span>
     </div>
     <div class="table-wrap">
@@ -512,7 +512,7 @@
     </div>
     <div id="emptyState" class="empty" style="display:none;">
       <div class="icon">📋</div>
-      <p>暂无数据，请先推广问卷链接收集回答。</p>
+      <p>暂无数据，请先推广报名表链接收集回答。</p>
     </div>
     <div class="pagination" id="pagination"></div>
   </div>
@@ -739,7 +739,7 @@ async function showDetail(id) {
 
     document.getElementById('modalContent').innerHTML = `
       <h3>
-        问卷详情 #${row.id}
+        报名详情 #${row.id}
         <button class="close-btn" onclick="closeModal()">&times;</button>
       </h3>
       ${fields.map(f => `
