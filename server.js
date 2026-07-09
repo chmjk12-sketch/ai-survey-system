@@ -240,6 +240,7 @@ app.get('/api/stats', (req, res) => {
     const blockersDist = queryJsonDist('blockers');
     const desiredOutcomesDist = queryJsonDist('desired_outcomes');
     const learningDirectionsDist = queryJsonDist('learning_directions');
+    const learningFormatDist = queryJsonDist('learning_format');
     const paymentTargetsDist = queryJsonDist('payment_targets');
 
     res.json({
