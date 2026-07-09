@@ -395,6 +395,37 @@ app.get('/api/export', (req, res) => {
   }
 });
 
+// ====== 表单配置 API ======
+const FORM_CONFIG_FILE = path.join(__dirname, 'form-config.json');
+
+// 获取表单配置
+app.get('/api/form-config', (req, res) => {
+  try {
+    if (fs.existsSync(FORM_CONFIG_FILE)) {
+      const config = JSON.parse(fs.readFileSync(FORM_CONFIG_FILE, 'utf-8'));
+      res.json({ success: true, config });
+    } else {
+      res.json({ success: true, config: null });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 更新表单配置（需要密码）
+app.put('/api/form-config', (req, res) => {
+  try {
+    const { password, config } = req.body;
+    if (password !== 'admin123') {
+      return res.status(403).json({ success: false, error: '密码错误' });
+    }
+    fs.writeFileSync(FORM_CONFIG_FILE, JSON.stringify(config, null, 2), 'utf-8');
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // ====== 页面路由 ======
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
