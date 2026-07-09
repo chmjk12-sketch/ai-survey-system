@@ -571,6 +571,9 @@
         if (!res.ok) throw new Error('API returned ' + res.status);
         return res.json();
       })
+      .then(function(data) {
+        return data.config;
+      })
       .catch(function(err) {
         console.warn('无法从 /api/form-config 加载配置，使用后备配置。', err);
         return FALLBACK_CONFIG;
