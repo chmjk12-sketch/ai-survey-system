@@ -53,7 +53,7 @@ jobs:
               --health-path /
 
       - name: Deploy via RunCommand API (fallback)
-        if: steps.ssh-deploy.outcome == 'failure'
+        if: steps.ssh-deploy.conclusion == 'failure'
         run: |
           python3 << 'PYEOF'
           import json, hmac, hashlib, base64, urllib.request, urllib.parse, uuid
@@ -90,7 +90,7 @@ jobs:
           PYEOF
 
       - name: Configure Caddy routes
-        if: steps.ssh-deploy.outcome == 'failure'
+        if: steps.ssh-deploy.conclusion == 'failure'
         run: |
           python3 << 'PYEOF'
           import json, hmac, hashlib, base64, urllib.request, urllib.parse, uuid
@@ -186,3 +186,4 @@ jobs:
           curl -skf "https://questionnaire.chmjk67.top/" && echo "HTTPS OK" || echo "HTTPS FAIL"
           echo "=== Verify questionnaire-admin.chmjk67.top ==="
           curl -skf "https://questionnaire-admin.chmjk67.top/admin" && echo "HTTPS OK" || echo "HTTPS FAIL"
+
