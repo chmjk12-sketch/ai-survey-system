@@ -78,6 +78,13 @@
     }
     .btn-outline:hover { background: var(--bg); }
 
+    /* ===== Tab Navigation ===== */
+    .tab-nav { display:flex; gap:0; margin-bottom:1.5rem; border-bottom:2px solid var(--rule); }
+    .tab-nav button { padding:0.6rem 1.5rem; font-size:0.88rem; font-weight:600; border:none; background:none; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-2px; transition:all 0.2s; }
+    .tab-nav button.active { color:var(--accent); border-bottom-color:var(--accent); }
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
+
     /* ===== Container ===== */
     .container {
       max-width: 1200px;
@@ -345,6 +352,27 @@
       margin-right: 0.2rem;
     }
 
+    /* ===== Form Editor ===== */
+    .form-editor .section-card { background:var(--card); border:1px solid var(--rule); border-radius:10px; padding:1.25rem; margin-bottom:1rem; }
+    .form-editor .section-card h3 { font-size:0.95rem; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.5rem; }
+    .form-editor .section-card h3 .num { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; background:var(--accent); color:#fff; border-radius:50%; font-size:0.75rem; }
+    .form-editor label { display:block; font-size:0.8rem; font-weight:600; color:var(--muted); margin-bottom:0.25rem; margin-top:0.75rem; }
+    .form-editor input[type="text"], .form-editor input[type="color"], .form-editor textarea, .form-editor select { width:100%; padding:0.5rem 0.75rem; border:1px solid var(--rule); border-radius:6px; font-size:0.85rem; font-family:inherit; outline:none; }
+    .form-editor input:focus, .form-editor textarea:focus { border-color:var(--accent); }
+    .form-editor .color-row { display:flex; gap:0.5rem; align-items:center; }
+    .form-editor .color-row input[type="color"] { width:50px; height:36px; padding:2px; }
+    .form-editor .question-card { background:var(--bg); border:1px solid var(--rule); border-radius:8px; padding:0.75rem 1rem; margin-bottom:0.5rem; }
+    .form-editor .question-card .q-header { display:flex; align-items:center; justify-content:space-between; cursor:pointer; font-weight:600; font-size:0.85rem; }
+    .form-editor .question-card .q-body { display:none; margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid var(--rule); }
+    .form-editor .question-card.open .q-body { display:block; }
+    .form-editor .option-row { display:flex; gap:0.5rem; align-items:center; margin-bottom:0.4rem; }
+    .form-editor .option-row input { flex:1; }
+    .form-editor .btn-sm { padding:0.3rem 0.7rem; font-size:0.75rem; }
+    .form-editor .btn-del { background:#fee2e2; color:var(--danger); border:1px solid #fecaca; }
+    .form-editor .btn-add { background:var(--accent-light); color:var(--accent); border:1px solid #c7d2fe; }
+    .theme-preview { padding:1rem; border-radius:8px; margin-bottom:1rem; text-align:center; }
+    .theme-preview h2 { font-size:1.1rem; }
+
     @media (max-width: 768px) {
       .container { padding: 1rem; }
       .topbar { padding: 0.75rem 1rem; }
@@ -366,156 +394,182 @@
 
 <div class="container">
 
-  <!-- 系统模式控制 + 数据筛选 + 清除 -->
-  <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem;flex-wrap:wrap;">
-    <!-- 系统模式开关 -->
-    <div style="display:flex;align-items:center;gap:0.5rem;">
-      <span style="font-size:0.85rem;font-weight:700;color:var(--ink);">系统模式：</span>
-      <span id="modeLabel" style="font-size:0.82rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:4px;background:var(--accent-light);color:var(--accent);">正式</span>
-      <button id="modeToggleBtn" class="btn btn-outline" onclick="toggleMode()" style="font-size:0.78rem;">切换为测试</button>
-    </div>
-
-    <div style="width:1px;height:24px;background:var(--rule);"></div>
-
-    <!-- 数据筛选 -->
-    <div style="display:flex;align-items:center;gap:0.5rem;">
-      <span style="font-size:0.85rem;font-weight:600;color:var(--muted);">查看：</span>
-      <button class="btn btn-outline env-btn active" data-env="all" onclick="switchEnv('all')">全部</button>
-      <button class="btn btn-outline env-btn" data-env="formal" onclick="switchEnv('formal')">仅正式</button>
-      <button class="btn btn-outline env-btn" data-env="test" onclick="switchEnv('test')">仅测试</button>
-    </div>
-
-    <span style="flex:1"></span>
-
-    <!-- 清除数据（使用真正的表单提交，兼容性最佳） -->
-    <div style="display:flex;gap:0.4rem;" id="clearBtns">
-      <button class="btn btn-outline" style="border-color:#f59e0b;color:#92400e;font-size:0.78rem;" data-mode="test" onclick="showClearConfirm(this)">清除测试数据</button>
-      <button class="btn btn-outline" style="border-color:#ef4444;color:#ef4444;font-size:0.78rem;" data-mode="formal" onclick="showClearConfirm(this)">清除正式数据</button>
-      <button class="btn btn-outline" style="border-color:#ef4444;color:#ef4444;font-size:0.78rem;" data-mode="all" onclick="showClearConfirm(this)">清除全部数据</button>
-    </div>
-  </div>
-  <style>
-    .env-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
-  </style>
-
-  <!-- 统计概览 -->
-  <div class="stats-grid" id="statsGrid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));">
-    <div class="stat-card">
-      <div class="label">当前筛选总量</div>
-      <div class="value" id="statTotal">-</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">正式数据</div>
-      <div class="value" id="statFormal" style="color:var(--accent)">-</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">测试数据</div>
-      <div class="value" id="statTest" style="color:#f59e0b">-</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">今日新增</div>
-      <div class="value" id="statToday">-</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">A0-A1 占比</div>
-      <div class="value" id="statBeginner">-</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">A3+ 占比</div>
-      <div class="value" id="statAdvanced">-</div>
-    </div>
+  <!-- Tab Navigation -->
+  <div class="tab-nav">
+    <button class="active" data-tab="stats" onclick="switchTab('stats')">数据统计</button>
+    <button data-tab="form" onclick="switchTab('form')">表单配置</button>
   </div>
 
-  <!-- 分布图 -->
-  <div class="dist-grid" id="distGrid">
-    <div class="dist-card">
-      <h3>入学时间分布</h3>
-      <div id="enrollYearDist"></div>
-    </div>
-    <div class="dist-card">
-      <h3>身份分布</h3>
-      <div id="identityDist"></div>
-    </div>
-    <div class="dist-card">
-      <h3>工作年限分布</h3>
-      <div id="workYearsDist"></div>
-    </div>
-    <div class="dist-card">
-      <h3>每日AI使用时长</h3>
-      <div id="dailyAiTimeDist"></div>
-    </div>
-    <div class="dist-card">
-      <h3>AI成熟度分布</h3>
-      <div id="aiMaturityDist"></div>
-    </div>
-    <div class="dist-card">
-      <h3>AI使用场景</h3>
-      <div id="aiScenariosDist"></div>
-    </div>
-    <div class="dist-card">
-      <h3>最浪费时间的事（Top痛点）</h3>
-      <div id="timeWastersDist"></div>
-    </div>
-    <div class="dist-card">
-      <h3>未解决的障碍</h3>
-      <div id="blockersDist"></div>
-    </div>
-    <div class="dist-card">
-      <h3>期望达到的结果</h3>
-      <div id="desiredOutcomesDist"></div>
-    </div>
-    <div class="dist-card">
-      <h3>想学习的方向</h3>
-      <div id="learningDirectionsDist"></div>
-    </div>
-    <div class="dist-card">
-      <h3>偏好的学习形式</h3>
-      <div id="learningFormatDist"></div>
-    </div>
-    <div class="dist-card">
-      <h3>可接受的学习时长</h3>
-      <div id="learningDurationDist"></div>
-    </div>
-    <div class="dist-card">
-      <h3>付费意愿</h3>
-      <div id="paymentTargetsDist"></div>
-    </div>
-  </div>
+  <!-- ==================== 数据统计 Tab ==================== -->
+  <div class="tab-panel active" id="tab-stats">
 
-  <!-- 数据表 -->
-  <div class="table-card">
-    <div class="table-header">
-      <h3>报名明细</h3>
-      <span style="font-size:0.78rem;color:var(--muted)" id="tableInfo"></span>
+    <!-- 系统模式控制 + 数据筛选 + 清除 -->
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem;flex-wrap:wrap;">
+      <!-- 系统模式开关 -->
+      <div style="display:flex;align-items:center;gap:0.5rem;">
+        <span style="font-size:0.85rem;font-weight:700;color:var(--ink);">系统模式：</span>
+        <span id="modeLabel" style="font-size:0.82rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:4px;background:var(--accent-light);color:var(--accent);">正式</span>
+        <button id="modeToggleBtn" class="btn btn-outline" onclick="toggleMode()" style="font-size:0.78rem;">切换为测试</button>
+      </div>
+
+      <div style="width:1px;height:24px;background:var(--rule);"></div>
+
+      <!-- 数据筛选 -->
+      <div style="display:flex;align-items:center;gap:0.5rem;">
+        <span style="font-size:0.85rem;font-weight:600;color:var(--muted);">查看：</span>
+        <button class="btn btn-outline env-btn active" data-env="all" onclick="switchEnv('all')">全部</button>
+        <button class="btn btn-outline env-btn" data-env="formal" onclick="switchEnv('formal')">仅正式</button>
+        <button class="btn btn-outline env-btn" data-env="test" onclick="switchEnv('test')">仅测试</button>
+      </div>
+
+      <span style="flex:1"></span>
+
+      <!-- 清除数据 -->
+      <div style="display:flex;gap:0.4rem;" id="clearBtns">
+        <button class="btn btn-outline" style="border-color:#f59e0b;color:#92400e;font-size:0.78rem;" data-mode="test" onclick="showClearConfirm(this)">清除测试数据</button>
+        <button class="btn btn-outline" style="border-color:#ef4444;color:#ef4444;font-size:0.78rem;" data-mode="formal" onclick="showClearConfirm(this)">清除正式数据</button>
+        <button class="btn btn-outline" style="border-color:#ef4444;color:#ef4444;font-size:0.78rem;" data-mode="all" onclick="showClearConfirm(this)">清除全部数据</button>
+      </div>
     </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>填报时间</th>
-            <th>模式</th>
-            <th>姓名</th>
-            <th>入学时间</th>
-            <th>身份</th>
-            <th>行业</th>
-            <th>工作年限</th>
-            <th>AI时长</th>
-            <th>成熟度</th>
-            <th>最痛点</th>
-            <th>最想AI做的事</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-      </table>
+    <style>
+      .env-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+    </style>
+
+    <!-- 统计概览 -->
+    <div class="stats-grid" id="statsGrid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));">
+      <div class="stat-card">
+        <div class="label">当前筛选总量</div>
+        <div class="value" id="statTotal">-</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">正式数据</div>
+        <div class="value" id="statFormal" style="color:var(--accent)">-</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">测试数据</div>
+        <div class="value" id="statTest" style="color:#f59e0b">-</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">今日新增</div>
+        <div class="value" id="statToday">-</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">A0-A1 占比</div>
+        <div class="value" id="statBeginner">-</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">A3+ 占比</div>
+        <div class="value" id="statAdvanced">-</div>
+      </div>
     </div>
-    <div id="emptyState" class="empty" style="display:none;">
-      <div class="icon">📋</div>
-      <p>暂无数据，请先推广报名表链接收集回答。</p>
+
+    <!-- 分布图 -->
+    <div class="dist-grid" id="distGrid">
+      <div class="dist-card">
+        <h3>入学时间分布</h3>
+        <div id="enrollYearDist"></div>
+      </div>
+      <div class="dist-card">
+        <h3>身份分布</h3>
+        <div id="identityDist"></div>
+      </div>
+      <div class="dist-card">
+        <h3>工作年限分布</h3>
+        <div id="workYearsDist"></div>
+      </div>
+      <div class="dist-card">
+        <h3>每日AI使用时长</h3>
+        <div id="dailyAiTimeDist"></div>
+      </div>
+      <div class="dist-card">
+        <h3>AI成熟度分布</h3>
+        <div id="aiMaturityDist"></div>
+      </div>
+      <div class="dist-card">
+        <h3>AI使用场景</h3>
+        <div id="aiScenariosDist"></div>
+      </div>
+      <div class="dist-card">
+        <h3>最浪费时间的事（Top痛点）</h3>
+        <div id="timeWastersDist"></div>
+      </div>
+      <div class="dist-card">
+        <h3>未解决的障碍</h3>
+        <div id="blockersDist"></div>
+      </div>
+      <div class="dist-card">
+        <h3>期望达到的结果</h3>
+        <div id="desiredOutcomesDist"></div>
+      </div>
+      <div class="dist-card">
+        <h3>想学习的方向</h3>
+        <div id="learningDirectionsDist"></div>
+      </div>
+      <div class="dist-card">
+        <h3>偏好的学习形式</h3>
+        <div id="learningFormatDist"></div>
+      </div>
+      <div class="dist-card">
+        <h3>可接受的学习时长</h3>
+        <div id="learningDurationDist"></div>
+      </div>
+      <div class="dist-card">
+        <h3>付费意愿</h3>
+        <div id="paymentTargetsDist"></div>
+      </div>
     </div>
-    <div class="pagination" id="pagination"></div>
-  </div>
+
+    <!-- 数据表 -->
+    <div class="table-card">
+      <div class="table-header">
+        <h3>报名明细</h3>
+        <span style="font-size:0.78rem;color:var(--muted)" id="tableInfo"></span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>填报时间</th>
+              <th>模式</th>
+              <th>姓名</th>
+              <th>入学时间</th>
+              <th>身份</th>
+              <th>行业</th>
+              <th>工作年限</th>
+              <th>AI时长</th>
+              <th>成熟度</th>
+              <th>最痛点</th>
+              <th>最想AI做的事</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+      <div id="emptyState" class="empty" style="display:none;">
+        <div class="icon">&#x1F4CB;</div>
+        <p>暂无数据，请先推广报名表链接收集回答。</p>
+      </div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+
+  </div><!-- /tab-stats -->
+
+  <!-- ==================== 表单配置 Tab ==================== -->
+  <div class="tab-panel" id="tab-form">
+    <div class="form-editor" id="formEditor">
+      <p style="text-align:center;padding:3rem;color:var(--muted);">正在加载表单配置...</p>
+    </div>
+    <div style="margin-top:1.5rem;display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap;">
+      <div style="flex:1;min-width:200px;">
+        <label style="display:block;font-size:0.8rem;font-weight:600;color:var(--muted);margin-bottom:0.25rem;">管理员密码</label>
+        <input type="password" id="formPassword" placeholder="输入密码以保存配置" style="width:100%;padding:0.5rem 0.75rem;border:1px solid var(--rule);border-radius:6px;font-size:0.85rem;outline:none;">
+      </div>
+      <button class="btn btn-primary" onclick="saveFormConfig()" style="padding:0.5rem 1.5rem;">保存配置</button>
+      <button class="btn btn-outline" onclick="resetFormConfig()" style="padding:0.5rem 1.5rem;">重置为默认</button>
+    </div>
+  </div><!-- /tab-form -->
 
 </div>
 
@@ -525,12 +579,39 @@
 </div>
 
 <script>
+// ============================================================
+//  Global State
+// ============================================================
 let currentPage = 1;
 const limit = 20;
 let currentEnv = 'all';
 let currentMode = 'formal';
+let formConfig = null;
 
-// ====== 系统模式切换 ======
+// ============================================================
+//  Tab Switching
+// ============================================================
+function switchTab(tabName) {
+  // Update tab buttons
+  document.querySelectorAll('.tab-nav button').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === tabName);
+  });
+  // Update tab panels
+  document.querySelectorAll('.tab-panel').forEach(panel => {
+    panel.classList.remove('active');
+  });
+  const targetPanel = document.getElementById('tab-' + tabName);
+  if (targetPanel) targetPanel.classList.add('active');
+
+  // Load form config when switching to form tab
+  if (tabName === 'form' && !formConfig) {
+    loadFormConfig();
+  }
+}
+
+// ============================================================
+//  System Mode
+// ============================================================
 async function toggleMode() {
   try {
     const newMode = currentMode === 'formal' ? 'test' : 'formal';
@@ -576,7 +657,9 @@ function updateModeUI() {
   }
 }
 
-// ====== 数据筛选 ======
+// ============================================================
+//  Data Filtering
+// ============================================================
 function switchEnv(env) {
   currentEnv = env;
   currentPage = 1;
@@ -587,7 +670,9 @@ function switchEnv(env) {
   loadData(1);
 }
 
-// ====== 加载统计 ======
+// ============================================================
+//  Stats
+// ============================================================
 async function loadStats() {
   try {
     const res = await fetch(`/api/stats?env=${currentEnv}`);
@@ -598,21 +683,18 @@ async function loadStats() {
     document.getElementById('statFormal').textContent = stats.formalCount;
     document.getElementById('statTest').textContent = stats.testCount;
 
-    // 今日新增（基于当前筛选）
     const today = new Date().toISOString().slice(0, 10);
     const resAll = await fetch(`/api/responses?env=${currentEnv}&limit=1000`);
     const allData = await resAll.json();
     const todayCount = allData.data.filter(r => r.created_at && r.created_at.startsWith(today)).length;
     document.getElementById('statToday').textContent = todayCount;
 
-    // 成熟度占比
     const matTotal = stats.aiMaturityDist.reduce((s, i) => s + i.count, 0);
     const beginnerCount = stats.aiMaturityDist.filter(i => i.value === 'A0' || i.value === 'A1').reduce((s, i) => s + i.count, 0);
     const advancedCount = stats.aiMaturityDist.filter(i => ['A3', 'A4', 'A5'].includes(i.value)).reduce((s, i) => s + i.count, 0);
     document.getElementById('statBeginner').textContent = matTotal > 0 ? Math.round(beginnerCount / matTotal * 100) + '%' : '-';
     document.getElementById('statAdvanced').textContent = matTotal > 0 ? Math.round(advancedCount / matTotal * 100) + '%' : '-';
 
-    // 渲染所有分布图
     renderDist('enrollYearDist', stats.enrollYearDist);
     renderDist('identityDist', stats.identityDist);
     renderDist('workYearsDist', stats.workYearsDist);
@@ -642,7 +724,7 @@ function renderDist(containerId, data) {
     const label = item.value || Object.values(item).find(v => typeof v === 'string') || '-';
     return `
     <div class="bar-row">
-      <span class="bar-label">${label}</span>
+      <span class="bar-label">${escapeHtml(label)}</span>
       <div class="bar-track">
         <div class="bar-fill" style="width:${max > 0 ? (item.count / max * 100) : 0}%"></div>
       </div>
@@ -651,7 +733,9 @@ function renderDist(containerId, data) {
   }).join('');
 }
 
-// ====== 加载列表 ======
+// ============================================================
+//  Data Table
+// ============================================================
 async function loadData(page) {
   if (page) currentPage = page;
   try {
@@ -677,14 +761,14 @@ async function loadData(page) {
         <td style="font-weight:600;color:var(--muted)">#${row.id}</td>
         <td>${formatTime(row.created_at)}</td>
         <td>${row.env_mode === 'test' ? '<span class="tag tag-warm">测试</span>' : '<span class="tag">正式</span>'}</td>
-        <td>${row.name || '-'}</td>
-        <td>${row.enroll_year || '-'}</td>
-        <td>${row.identity || '-'}</td>
-        <td>${row.industry || '-'}</td>
-        <td>${row.work_years || '-'}</td>
-        <td>${row.daily_ai_time || '-'}</td>
-        <td><span class="tag">${row.ai_maturity || '-'}</span></td>
-        <td>${(row.time_wasters || []).slice(0, 2).join('、')}${(row.time_wasters || []).length > 2 ? '...' : '-'}</td>
+        <td>${escapeHtml(row.name || '-')}</td>
+        <td>${escapeHtml(row.enroll_year || '-')}</td>
+        <td>${escapeHtml(row.identity || '-')}</td>
+        <td>${escapeHtml(row.industry || '-')}</td>
+        <td>${escapeHtml(row.work_years || '-')}</td>
+        <td>${escapeHtml(row.daily_ai_time || '-')}</td>
+        <td><span class="tag">${escapeHtml(row.ai_maturity || '-')}</span></td>
+        <td>${(row.time_wasters || []).slice(0, 2).map(t => escapeHtml(t)).join('、')}${(row.time_wasters || []).length > 2 ? '...' : '-'}</td>
         <td title="${escapeHtml(row.most_wanted_one || '')}">${truncate(row.most_wanted_one, 20)}</td>
         <td><button class="btn btn-outline" style="padding:0.2rem 0.6rem;font-size:0.72rem" onclick="showDetail(${row.id})">详情</button></td>
       </tr>
@@ -706,7 +790,9 @@ function renderPagination(current, total) {
   container.innerHTML = html;
 }
 
-// ====== 详情 ======
+// ============================================================
+//  Detail Modal
+// ============================================================
 async function showDetail(id) {
   try {
     const res = await fetch(`/api/responses?limit=1000`);
@@ -718,23 +804,23 @@ async function showDetail(id) {
       { label: 'ID', value: '#' + row.id },
       { label: '提交时间', value: row.created_at },
       { label: '数据模式', value: row.env_mode === 'test' ? '<span class="tag tag-warm">测试</span>' : '<span class="tag">正式</span>' },
-      { label: '姓名', value: row.name },
-      { label: '入学时间', value: row.enroll_year },
-      { label: '身份', value: row.identity },
-      { label: '行业', value: row.industry },
-      { label: '工作年限', value: row.work_years },
-      { label: '每日AI时长', value: row.daily_ai_time },
+      { label: '姓名', value: escapeHtml(row.name) },
+      { label: '入学时间', value: escapeHtml(row.enroll_year) },
+      { label: '身份', value: escapeHtml(row.identity) },
+      { label: '行业', value: escapeHtml(row.industry) },
+      { label: '工作年限', value: escapeHtml(row.work_years) },
+      { label: '每日AI时长', value: escapeHtml(row.daily_ai_time) },
       { label: 'AI使用场景', value: renderTags(row.ai_scenarios) },
       { label: '最浪费时间的事', value: renderTags(row.time_wasters) },
-      { label: '最希望AI解决的一件事', value: row.most_wanted_one },
+      { label: '最希望AI解决的一件事', value: escapeHtml(row.most_wanted_one) },
       { label: '未解决的障碍', value: renderTags(row.blockers) },
-      { label: 'AI成熟度', value: row.ai_maturity ? `<span class="tag">${row.ai_maturity}</span>` : '-' },
+      { label: 'AI成熟度', value: row.ai_maturity ? `<span class="tag">${escapeHtml(row.ai_maturity)}</span>` : '-' },
       { label: '期望达到的结果', value: renderTags(row.desired_outcomes) },
       { label: '学习方向', value: renderTags(row.learning_directions) },
-      { label: '学习形式', value: row.learning_format },
-      { label: '学习时长', value: row.learning_duration },
+      { label: '学习形式', value: escapeHtml(row.learning_format) },
+      { label: '学习时长', value: escapeHtml(row.learning_duration) },
       { label: '付费意愿', value: renderTags(row.payment_targets) },
-      { label: '半年后的回望', value: row.lookback || '-' },
+      { label: '半年后的回望', value: escapeHtml(row.lookback || '-') },
     ];
 
     document.getElementById('modalContent').innerHTML = `
@@ -761,19 +847,22 @@ function closeModal() {
 
 function renderTags(arr) {
   if (!arr || arr.length === 0) return '-';
-  return arr.map(t => `<span class="tag">${t}</span>`).join(' ');
+  return arr.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join(' ');
 }
 
-// ====== 导出 CSV ======
+// ============================================================
+//  Export CSV
+// ============================================================
 function exportCSV() {
   window.location.href = `/api/export?env=${currentEnv}`;
 }
 
-// ====== 清除数据（两步确认 + 直接页面跳转） ======
+// ============================================================
+//  Clear Data
+// ============================================================
 function showClearConfirm(btn) {
   const mode = btn.dataset.mode;
   const container = document.getElementById('clearBtns');
-  // 替换按钮为确认按钮
   container.innerHTML = `
     <button class="btn" style="background:#ef4444;color:#fff;border:none;font-size:0.78rem;padding:0.4rem 1rem;border-radius:6px;cursor:pointer;font-weight:600;"
       id="confirmClearBtn">确认清除${mode === 'all' ? '全部' : mode === 'test' ? '测试' : '正式'}数据？</button>
@@ -782,7 +871,6 @@ function showClearConfirm(btn) {
   document.getElementById('confirmClearBtn').addEventListener('click', function() {
     this.textContent = '清除中...';
     this.disabled = true;
-    // 直接跳转到清除接口（GET方式，服务端执行删除后重定向回后台）
     window.location.href = '/api/do-clear?mode=' + encodeURIComponent(mode);
   });
   document.getElementById('cancelClearBtn').addEventListener('click', cancelClear);
@@ -797,7 +885,9 @@ function cancelClear() {
   `;
 }
 
-// ====== Toast 提示（替代 alert） ======
+// ============================================================
+//  Toast
+// ============================================================
 function showToast(msg, type) {
   const existing = document.getElementById('toast-msg');
   if (existing) existing.remove();
@@ -810,20 +900,9 @@ function showToast(msg, type) {
   setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, 2500);
 }
 
-// ====== Toast 提示（替代 alert） ======
-function showToast(msg, type) {
-  const existing = document.getElementById('toast-msg');
-  if (existing) existing.remove();
-  const t = document.createElement('div');
-  t.id = 'toast-msg';
-  const bgColor = type === 'error' ? '#ef4444' : '#10b981';
-  t.style.cssText = `position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:9999;padding:0.75rem 1.5rem;background:${bgColor};color:#fff;border-radius:8px;font-size:0.9rem;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,0.2);transition:opacity 0.3s;pointer-events:none;`;
-  t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, 2500);
-}
-
-// ====== 工具 ======
+// ============================================================
+//  Utilities
+// ============================================================
 function formatTime(str) {
   if (!str) return '-';
   return str.replace('T', ' ').substring(0, 16);
@@ -833,17 +912,425 @@ function truncate(str, len) {
   return str.length > len ? str.substring(0, len) + '...' : str;
 }
 function escapeHtml(str) {
+  if (!str) return '';
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
 }
 
-// ====== 初始化 ======
+// ============================================================
+//  Form Editor
+// ============================================================
+
+// Load form config from API
+async function loadFormConfig() {
+  const editor = document.getElementById('formEditor');
+  editor.innerHTML = '<p style="text-align:center;padding:3rem;color:var(--muted);">正在加载表单配置...</p>';
+  try {
+    const res = await fetch('/api/form-config');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    formConfig = await res.json();
+    renderFormEditor(formConfig);
+  } catch (e) {
+    console.error('加载表单配置失败', e);
+    editor.innerHTML = '<p style="text-align:center;padding:3rem;color:var(--danger);">加载表单配置失败: ' + escapeHtml(e.message) + '</p>';
+  }
+}
+
+// Render the full form editor
+function renderFormEditor(config) {
+  const editor = document.getElementById('formEditor');
+  if (!config) {
+    editor.innerHTML = '<p style="text-align:center;padding:3rem;color:var(--muted);">暂无配置数据</p>';
+    return;
+  }
+
+  let html = '';
+
+  // Theme section
+  if (config.theme) {
+    html += renderThemeSection(config.theme);
+  }
+
+  // Header section
+  if (config.header) {
+    html += renderHeaderSection(config.header);
+  }
+
+  // Sections
+  if (config.sections && Array.isArray(config.sections)) {
+    html += renderSections(config.sections);
+  }
+
+  editor.innerHTML = html;
+
+  // Attach question toggle handlers
+  editor.querySelectorAll('.question-card .q-header').forEach(header => {
+    header.addEventListener('click', function(e) {
+      // Don't toggle when clicking on buttons or inputs inside the header
+      if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
+      this.parentElement.classList.toggle('open');
+    });
+  });
+
+  // Attach option delete handlers
+  editor.querySelectorAll('.btn-del-option').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      this.closest('.option-row').remove();
+    });
+  });
+
+  // Attach add option handlers
+  editor.querySelectorAll('.btn-add-option').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const container = this.parentElement.querySelector('.options-list');
+      const qType = this.dataset.qtype || 'radio';
+      const optHtml = renderOptionRow(qType, { value: '', label: '', desc: '' });
+      const div = document.createElement('div');
+      div.className = 'option-row';
+      div.innerHTML = optHtml;
+      // Re-attach delete handler
+      div.querySelector('.btn-del-option').addEventListener('click', function(ev) {
+        ev.stopPropagation();
+        this.closest('.option-row').remove();
+      });
+      container.appendChild(div);
+    });
+  });
+}
+
+// Render theme section
+function renderThemeSection(theme) {
+  const fields = Object.entries(theme);
+  if (fields.length === 0) return '';
+
+  let html = '<div class="section-card"><h3><span class="num">T</span> 主题设置</h3>';
+
+  // Theme preview
+  html += '<div class="theme-preview" id="themePreview" style="background:' + escapeHtml(theme.accentLight || '#eef2ff') + ';border:2px solid ' + escapeHtml(theme.accent || '#4f46e5') + ';">';
+  html += '<h2 style="color:' + escapeHtml(theme.accent || '#4f46e5') + ';">主题预览</h2>';
+  html += '<p style="font-size:0.85rem;">预览主题颜色效果</p>';
+  html += '</div>';
+
+  for (const [key, value] of fields) {
+    const label = formatFieldLabel(key);
+    if (typeof value === 'string' && (value.startsWith('#') || key.toLowerCase().includes('color') || key.toLowerCase().includes('accent'))) {
+      // Color picker
+      html += '<div class="color-row">';
+      html += '<label style="margin-top:0;flex:1;">' + label + '</label>';
+      html += '<input type="color" data-key="theme.' + key + '" value="' + escapeHtml(value) + '" onchange="updateThemePreview()">';
+      html += '<input type="text" data-key="theme.' + key + '" value="' + escapeHtml(value) + '" onchange="updateThemePreview()" style="flex:2;">';
+      html += '</div>';
+    } else {
+      // Text input
+      html += '<label>' + label + '</label>';
+      html += '<input type="text" data-key="theme.' + key + '" value="' + escapeHtml(String(value)) + '">';
+    }
+  }
+  html += '</div>';
+  return html;
+}
+
+// Render header section
+function renderHeaderSection(header) {
+  const fields = Object.entries(header);
+  if (fields.length === 0) return '';
+
+  let html = '<div class="section-card"><h3><span class="num">H</span> 头部设置</h3>';
+  for (const [key, value] of fields) {
+    html += '<label>' + formatFieldLabel(key) + '</label>';
+    html += '<input type="text" data-key="header.' + key + '" value="' + escapeHtml(String(value || '')) + '">';
+  }
+  html += '</div>';
+  return html;
+}
+
+// Render all sections
+function renderSections(sections) {
+  let html = '';
+  sections.forEach((section, si) => {
+    html += '<div class="section-card">';
+    html += '<h3><span class="num">' + (si + 1) + '</span> 区块设置</h3>';
+
+    // Section title
+    html += '<label>区块标题</label>';
+    html += '<input type="text" data-key="sections.' + si + '.title" value="' + escapeHtml(section.title || '') + '">';
+
+    // Section description
+    html += '<label>区块描述</label>';
+    html += '<textarea data-key="sections.' + si + '.description" rows="2">' + escapeHtml(section.description || '') + '</textarea>';
+
+    // Questions
+    if (section.questions && Array.isArray(section.questions)) {
+      html += '<label style="margin-top:1rem;">题目列表</label>';
+      section.questions.forEach((question, qi) => {
+        html += renderQuestionCard(question, si, qi);
+      });
+    }
+
+    html += '</div>';
+  });
+  return html;
+}
+
+// Render a single question card
+function renderQuestionCard(question, sectionIndex, questionIndex) {
+  const qType = question.type || 'text';
+  const typeLabel = getQuestionTypeLabel(qType);
+  const labelPreview = question.label || '未命名题目';
+
+  let html = '<div class="question-card" data-si="' + sectionIndex + '" data-qi="' + questionIndex + '">';
+
+  // Header
+  html += '<div class="q-header">';
+  html += '<span>' + escapeHtml(labelPreview) + ' <span style="font-weight:400;color:var(--muted);font-size:0.75rem;">(' + typeLabel + ')</span></span>';
+  html += '<span style="font-size:0.7rem;color:var(--muted);">&#x25BC;</span>';
+  html += '</div>';
+
+  // Body
+  html += '<div class="q-body">';
+
+  // Question type (readonly display)
+  html += '<label>题目类型</label>';
+  html += '<input type="text" value="' + escapeHtml(typeLabel) + '" readonly style="background:#f9fafb;color:var(--muted);">';
+
+  // Label
+  html += '<label>题目文本</label>';
+  html += '<input type="text" data-key="sections.' + sectionIndex + '.questions.' + questionIndex + '.label" value="' + escapeHtml(question.label || '') + '">';
+
+  // Hint
+  html += '<label>提示文字</label>';
+  html += '<input type="text" data-key="sections.' + sectionIndex + '.questions.' + questionIndex + '.hint" value="' + escapeHtml(question.hint || '') + '">';
+
+  // Placeholder
+  html += '<label>占位文本</label>';
+  html += '<input type="text" data-key="sections.' + sectionIndex + '.questions.' + questionIndex + '.placeholder" value="' + escapeHtml(question.placeholder || '') + '">';
+
+  // Error message
+  html += '<label>错误提示</label>';
+  html += '<input type="text" data-key="sections.' + sectionIndex + '.questions.' + questionIndex + '.errorMsg" value="' + escapeHtml(question.errorMsg || '') + '">';
+
+  // Options (for radio, checkbox, maturity)
+  if (['radio', 'checkbox', 'maturity'].includes(qType) || question.options) {
+    html += '<label>选项列表</label>';
+    html += '<div class="options-list">';
+    if (question.options && Array.isArray(question.options)) {
+      question.options.forEach((opt, oi) => {
+        html += '<div class="option-row">';
+        html += renderOptionRow(qType, opt);
+        html += '</div>';
+      });
+    }
+    html += '</div>';
+    html += '<button class="btn btn-sm btn-add btn-add-option" data-qtype="' + qType + '" style="margin-top:0.4rem;">+ 添加选项</button>';
+  }
+
+  html += '</div>'; // .q-body
+  html += '</div>'; // .question-card
+
+  return html;
+}
+
+// Render a single option row (for radio/checkbox/maturity)
+function renderOptionRow(qType, opt) {
+  let html = '';
+  html += '<input type="text" class="opt-value" placeholder="值" value="' + escapeHtml(opt.value || '') + '" style="flex:1;">';
+  html += '<input type="text" class="opt-label" placeholder="标签" value="' + escapeHtml(opt.label || '') + '" style="flex:2;">';
+  if (qType === 'maturity') {
+    html += '<input type="text" class="opt-desc" placeholder="描述" value="' + escapeHtml(opt.desc || '') + '" style="flex:3;">';
+  }
+  html += '<button class="btn btn-sm btn-del btn-del-option">删除</button>';
+  return html;
+}
+
+// Get human-readable question type label
+function getQuestionTypeLabel(type) {
+  const labels = {
+    'text': '文本输入',
+    'textarea': '多行文本',
+    'radio': '单选',
+    'checkbox': '多选',
+    'maturity': '成熟度',
+    'select': '下拉选择',
+    'email': '邮箱',
+    'phone': '电话',
+    'number': '数字',
+    'date': '日期',
+    'url': '链接'
+  };
+  return labels[type] || type;
+}
+
+// Format field key to readable label
+function formatFieldLabel(key) {
+  const labels = {
+    'accent': '主色调',
+    'accentLight': '浅色背景',
+    'accentHover': '悬停色',
+    'title': '标题',
+    'subtitle': '副标题',
+    'timeBadge': '时间标识',
+    'bgColor': '背景色',
+    'cardBg': '卡片背景',
+    'textColor': '文字颜色',
+    'mutedColor': '辅助文字色',
+    'ruleColor': '分割线颜色',
+    'dangerColor': '危险色',
+    'successColor': '成功色'
+  };
+  return labels[key] || key;
+}
+
+// Update theme preview live
+function updateThemePreview() {
+  const preview = document.getElementById('themePreview');
+  if (!preview) return;
+  const accentEl = document.querySelector('[data-key="theme.accent"]');
+  const accentLightEl = document.querySelector('[data-key="theme.accentLight"]');
+  if (accentEl) preview.style.borderColor = accentEl.value;
+  if (accentLightEl) preview.style.background = accentLightEl.value;
+  const h2 = preview.querySelector('h2');
+  if (h2 && accentEl) h2.style.color = accentEl.value;
+}
+
+// Collect form data from editor
+function collectFormData() {
+  const data = JSON.parse(JSON.stringify(formConfig)); // Deep clone
+
+  // Collect theme fields
+  document.querySelectorAll('[data-key^="theme."]').forEach(el => {
+    const key = el.dataset.key.replace('theme.', '');
+    if (!data.theme) data.theme = {};
+    data.theme[key] = el.value;
+  });
+
+  // Collect header fields
+  document.querySelectorAll('[data-key^="header."]').forEach(el => {
+    const key = el.dataset.key.replace('header.', '');
+    if (!data.header) data.header = {};
+    data.header[key] = el.value;
+  });
+
+  // Collect section fields
+  document.querySelectorAll('[data-key^="sections."]').forEach(el => {
+    const keyPath = el.dataset.key.replace('sections.', '');
+    const parts = keyPath.split('.');
+    // parts[0] = section index, parts[1] = "questions"|"title"|"description", etc.
+    const si = parseInt(parts[0], 10);
+    if (!data.sections[si]) return;
+
+    if (parts[1] === 'title') {
+      data.sections[si].title = el.value;
+    } else if (parts[1] === 'description') {
+      data.sections[si].description = el.value;
+    } else if (parts[1] === 'questions') {
+      const qi = parseInt(parts[2], 10);
+      const field = parts[3];
+      if (!data.sections[si].questions[qi]) return;
+      data.sections[si].questions[qi][field] = el.value;
+    }
+  });
+
+  // Collect options from option rows
+  document.querySelectorAll('.question-card').forEach(qCard => {
+    const si = parseInt(qCard.dataset.si, 10);
+    const qi = parseInt(qCard.dataset.qi, 10);
+    if (isNaN(si) || isNaN(qi)) return;
+    if (!data.sections[si] || !data.sections[si].questions[qi]) return;
+
+    const qType = data.sections[si].questions[qi].type;
+    const optionRows = qCard.querySelectorAll('.option-row');
+    if (optionRows.length > 0) {
+      const options = [];
+      optionRows.forEach(row => {
+        const valEl = row.querySelector('.opt-value');
+        const labelEl = row.querySelector('.opt-label');
+        const descEl = row.querySelector('.opt-desc');
+        const opt = {
+          value: valEl ? valEl.value : '',
+          label: labelEl ? labelEl.value : ''
+        };
+        if (qType === 'maturity' && descEl) {
+          opt.desc = descEl.value;
+        }
+        options.push(opt);
+      });
+      data.sections[si].questions[qi].options = options;
+    }
+  });
+
+  return data;
+}
+
+// Save form config
+async function saveFormConfig() {
+  const password = document.getElementById('formPassword').value;
+  if (!password) {
+    showToast('请输入管理员密码', 'error');
+    return;
+  }
+
+  const data = collectFormData();
+
+  try {
+    const res = await fetch('/api/form-config', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: password, config: data })
+    });
+    const result = await res.json();
+    if (result.success) {
+      showToast('配置保存成功');
+      formConfig = data; // Update local cache
+    } else {
+      showToast('保存失败: ' + (result.error || '未知错误'), 'error');
+    }
+  } catch (e) {
+    console.error('保存配置失败', e);
+    showToast('保存失败: ' + e.message, 'error');
+  }
+}
+
+// Reset form config to default
+async function resetFormConfig() {
+  if (!confirm('确定要重置表单配置为默认值吗？此操作不可撤销。')) return;
+
+  const password = document.getElementById('formPassword').value;
+  if (!password) {
+    showToast('请输入管理员密码', 'error');
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/form-config', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: password, reset: true })
+    });
+    const result = await res.json();
+    if (result.success) {
+      showToast('配置已重置为默认值');
+      formConfig = null;
+      loadFormConfig();
+    } else {
+      showToast('重置失败: ' + (result.error || '未知错误'), 'error');
+    }
+  } catch (e) {
+    console.error('重置配置失败', e);
+    showToast('重置失败: ' + e.message, 'error');
+  }
+}
+
+// ============================================================
+//  Initialization
+// ============================================================
 loadMode();
 loadStats();
 loadData(1);
 
-// 检查URL参数，显示清除结果提示
+// Check URL params for clear result
 (function() {
   const params = new URLSearchParams(window.location.search);
   const cleared = params.get('cleared');
@@ -851,7 +1338,6 @@ loadData(1);
   const error = params.get('error');
   if (cleared && count !== null) {
     showToast('已清除' + cleared + '数据 ' + count + ' 条');
-    // 清除URL参数，避免刷新时重复提示
     window.history.replaceState({}, '', '/admin');
   } else if (error) {
     showToast('清除失败: ' + error, 'error');
