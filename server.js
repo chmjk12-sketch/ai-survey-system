@@ -217,7 +217,6 @@ app.get('/api/stats', (req, res) => {
     const workYearsDist = queryDist('work_years');
     const dailyAiTimeDist = queryDist('daily_ai_time');
     const aiMaturityDist = queryDist('ai_maturity');
-    const learningFormatDist = queryDist('learning_format');
     const learningDurationDist = queryDist('learning_duration');
 
     // 多选字段统计
