@@ -644,26 +644,6 @@
 
 <!-- 详情弹窗 -->
 
-<!-- 分享二维码弹窗 -->
-<div class="share-overlay" id="shareOverlay" onclick="if(event.target===this)closeShareModal()">
-  <div class="share-modal">
-    <div class="share-header">
-      <h3>分享报名表</h3>
-      <button class="share-close" onclick="closeShareModal()">&times;</button>
-    </div>
-    <div class="share-body">
-      <div class="qr-wrapper">
-        <canvas id="qrCanvas"></canvas>
-      </div>
-      <p class="share-hint">扫描二维码打开报名表</p>
-      <div class="share-url-row">
-        <input type="text" id="shareUrl" readonly class="share-url-input" />
-        <button class="btn btn-primary share-copy-btn" onclick="copyShareUrl()">复制链接</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 
 <!-- 分享二维码弹窗 -->
 <div class="share-overlay" id="shareOverlay" onclick="if(event.target===this)closeShareModal()">
@@ -1489,39 +1469,4 @@ loadData(1);
     });
   }
 
-  /* ===== 分享二维码 ===== */
-  function showShareModal() {
-    var url = window.location.protocol + '//' + window.location.host.replace(/admin\./, '');
-    if (!url.startsWith('http')) url = 'https://questionnaire.chmjk67.top';
-    document.getElementById('shareUrl').value = url;
-    var canvas = document.getElementById('qrCanvas');
-    canvas.width = 200;
-    canvas.height = 200;
-    QRCode.toCanvas(canvas, url, {
-      width: 200,
-      margin: 1,
-      color: { dark: '#1a1a2e', light: '#ffffff' }
-    }, function(err) {
-      if (err) console.error('QR Error:', err);
-    });
-    document.getElementById('shareOverlay').classList.add('show');
-  }
-
-  function closeShareModal() {
-    document.getElementById('shareOverlay').classList.remove('show');
-  }
-
-  function copyShareUrl() {
-    var input = document.getElementById('shareUrl');
-    input.select();
-    navigator.clipboard.writeText(input.value).then(function() {
-      showToast('链接已复制');
-    }).catch(function() {
-      document.execCommand('copy');
-      showToast('链接已复制');
-    });
-  }
-</script>
-
-</body>
-</html>
+  
