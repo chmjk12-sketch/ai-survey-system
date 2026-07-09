@@ -375,316 +375,11 @@
 
 <div class="container">
 
-  <!-- ===== 头部 ===== -->
-  <div class="header" id="formHeader">
-    <h1>AI工具课报名报名表</h1>
-    <p>感谢你抽出几分钟时间。你的回答将直接影响我们的课程内容和产品方向，帮助我们为你提供真正有价值的学习方案。</p>
-    <span class="time-badge">预计用时 5-8 分钟</span>
-  </div>
+  <!-- 头部 (由 JS 动态渲染) -->
+  <div class="header" id="formHeader"></div>
 
-  <!-- ===== 报名表表单 ===== -->
-  <form id="surveyForm" novalidate>
-
-    <!-- 第一部分：用户画像 -->
-    <div class="section" data-section="1">
-      <div class="section-title"><span class="num">1</span> 基本信息了解</div>
-      <div class="section-desc">帮助我们了解你的背景，以便提供更精准的学习方案。</div>
-
-      <div class="question" data-field="name" data-required="true">
-        <div class="q-label"><span class="required">*</span> 你的姓名</div>
-        <input type="text" name="name" class="text-input" placeholder="请填写真实姓名">
-        <div class="error-msg">请填写姓名</div>
-      </div>
-
-      <div class="question" data-field="enroll_year" data-required="true">
-        <div class="q-label"><span class="required">*</span> 你的入学时间</div>
-        <div class="radio-group">
-          <label class="radio-option"><input type="radio" name="enroll_year" value="2026年"><span class="label">2026年</span></label>
-          <label class="radio-option"><input type="radio" name="enroll_year" value="2025年"><span class="label">2025年</span></label>
-          <label class="radio-option"><input type="radio" name="enroll_year" value="2024年及以前"><span class="label">2024年及以前</span></label>
-        </div>
-        <div class="error-msg">请选择入学时间</div>
-      </div>
-
-      <div class="question" data-field="identity" data-required="true">
-        <div class="q-label"><span class="required">*</span> 你的身份是？</div>
-        <div class="radio-group">
-          <label class="radio-option"><input type="radio" name="identity" value="企业管理者"><span class="label">企业管理者</span></label>
-          <label class="radio-option"><input type="radio" name="identity" value="创业者"><span class="label">创业者</span></label>
-          <label class="radio-option"><input type="radio" name="identity" value="职业经理人"><span class="label">职业经理人</span></label>
-          <label class="radio-option"><input type="radio" name="identity" value="自由职业"><span class="label">自由职业</span></label>
-          <label class="radio-option"><input type="radio" name="identity" value="学生"><span class="label">学生</span></label>
-          <label class="radio-option"><input type="radio" name="identity" value="其他"><span class="label">其他</span></label>
-        </div>
-        <div class="error-msg">请选择你的身份</div>
-      </div>
-
-      <div class="question" data-field="industry" data-required="true">
-        <div class="q-label"><span class="required">*</span> 你所在的行业是？</div>
-        <input type="text" name="industry" class="text-input" placeholder="例如：互联网、金融、教育、制造、零售、医疗等">
-        <div class="error-msg">请填写你所在的行业</div>
-      </div>
-
-      <div class="question" data-field="work_years" data-required="true">
-        <div class="q-label"><span class="required">*</span> 你的工作年限是？</div>
-        <div class="radio-group">
-          <label class="radio-option"><input type="radio" name="work_years" value="<3年"><span class="label">&lt; 3年</span></label>
-          <label class="radio-option"><input type="radio" name="work_years" value="3~5年"><span class="label">3~5年</span></label>
-          <label class="radio-option"><input type="radio" name="work_years" value="5~10年"><span class="label">5~10年</span></label>
-          <label class="radio-option"><input type="radio" name="work_years" value="10年以上"><span class="label">10年以上</span></label>
-        </div>
-        <div class="error-msg">请选择你的工作年限</div>
-      </div>
-    </div>
-
-    <!-- 第二部分：AI使用现状 -->
-    <div class="section" data-section="2">
-      <div class="section-title"><span class="num">2</span> AI使用现状</div>
-      <div class="section-desc">了解你和AI的"亲密程度"。</div>
-
-      <div class="question" data-field="daily_ai_time" data-required="true">
-        <div class="q-label"><span class="required">*</span> 你每天使用AI的时间大约是？</div>
-        <div class="radio-group">
-          <label class="radio-option"><input type="radio" name="daily_ai_time" value="不使用"><span class="label">不使用</span></label>
-          <label class="radio-option"><input type="radio" name="daily_ai_time" value="<30分钟"><span class="label">&lt; 30分钟</span></label>
-          <label class="radio-option"><input type="radio" name="daily_ai_time" value="30分钟~1小时"><span class="label">30分钟~1小时</span></label>
-          <label class="radio-option"><input type="radio" name="daily_ai_time" value="1~3小时"><span class="label">1~3小时</span></label>
-          <label class="radio-option"><input type="radio" name="daily_ai_time" value="3小时以上"><span class="label">3小时以上</span></label>
-        </div>
-        <div class="error-msg">请选择每日AI使用时长</div>
-      </div>
-
-      <div class="question" data-field="ai_scenarios" data-required="true">
-        <div class="q-label"><span class="required">*</span> AI已经进入你的哪些工作场景？</div>
-        <div class="q-hint">可多选，选择所有已实际使用AI辅助的场景</div>
-        <div class="check-group">
-          <label class="check-option"><input type="checkbox" name="ai_scenarios" value="写方案"><span class="label">写方案</span></label>
-          <label class="check-option"><input type="checkbox" name="ai_scenarios" value="PPT制作"><span class="label">PPT制作</span></label>
-          <label class="check-option"><input type="checkbox" name="ai_scenarios" value="数据分析"><span class="label">数据分析</span></label>
-          <label class="check-option"><input type="checkbox" name="ai_scenarios" value="营销内容"><span class="label">营销内容</span></label>
-          <label class="check-option"><input type="checkbox" name="ai_scenarios" value="编程开发"><span class="label">编程开发</span></label>
-          <label class="check-option"><input type="checkbox" name="ai_scenarios" value="管理决策"><span class="label">管理决策</span></label>
-          <label class="check-option"><input type="checkbox" name="ai_scenarios" value="客户服务"><span class="label">客户服务</span></label>
-          <label class="check-option"><input type="checkbox" name="ai_scenarios" value="没有真正使用"><span class="label">没有真正使用</span></label>
-        </div>
-        <div class="error-msg">请至少选择一个场景</div>
-      </div>
-    </div>
-
-    <!-- 第三部分：痛点挖掘 -->
-    <div class="section" data-section="3">
-      <div class="section-title"><span class="num">3</span> 工作痛点（最重要部分）</div>
-      <div class="section-desc">这部分的数据将直接影响我们的课程方向，请认真作答。</div>
-
-      <div class="question" data-field="time_wasters" data-required="true">
-        <div class="q-label"><span class="required">*</span> 目前工作中最浪费时间的事情是？</div>
-        <div class="q-hint">最多选3项 — 请选出让你感受最深的痛点</div>
-        <div class="check-group" data-max="3">
-          <label class="check-option"><input type="checkbox" name="time_wasters" value="写PPT"><span class="label">写PPT</span></label>
-          <label class="check-option"><input type="checkbox" name="time_wasters" value="写报告/方案"><span class="label">写报告/方案</span></label>
-          <label class="check-option"><input type="checkbox" name="time_wasters" value="搜集整理资料"><span class="label">搜集整理资料</span></label>
-          <label class="check-option"><input type="checkbox" name="time_wasters" value="市场分析研究"><span class="label">市场分析研究</span></label>
-          <label class="check-option"><input type="checkbox" name="time_wasters" value="数据处理"><span class="label">数据处理</span></label>
-          <label class="check-option"><input type="checkbox" name="time_wasters" value="客户管理"><span class="label">客户管理</span></label>
-          <label class="check-option"><input type="checkbox" name="time_wasters" value="重复性办公流程"><span class="label">重复性办公流程</span></label>
-          <label class="check-option"><input type="checkbox" name="time_wasters" value="不知道怎么用AI提效"><span class="label">不知道怎么用AI提效</span></label>
-          <label class="check-option"><input type="checkbox" name="time_wasters" value="AI回答不稳定"><span class="label">AI回答不稳定、不可靠</span></label>
-          <label class="check-option"><input type="checkbox" name="time_wasters" value="不会搭建Agent"><span class="label">不会搭建Agent</span></label>
-          <label class="check-option"><input type="checkbox" name="time_wasters" value="其他"><span class="label">其他</span></label>
-        </div>
-        <div class="error-msg">请至少选择一项，最多3项</div>
-      </div>
-
-      <div class="question" data-field="most_wanted_one" data-required="true">
-        <div class="q-label"><span class="required">*</span> 如果AI只能帮你解决一件事，你最希望是什么？</div>
-        <div class="q-hint">请尽可能具体地描述。这道题的数据将直接影响我们的课程设计。</div>
-        <textarea name="most_wanted_one" class="text-input" placeholder="例如：每天自动生成竞品分析报告、一键完成周报汇总、让AI替我回复常见客户问题..." rows="3"></textarea>
-        <div class="error-msg">请填写你的回答，这对我们非常重要</div>
-      </div>
-
-      <div class="question" data-field="blockers" data-required="true">
-        <div class="q-label"><span class="required">*</span> 为什么这些问题到现在还没有被解决？</div>
-        <div class="q-hint">可多选</div>
-        <div class="check-group">
-          <label class="check-option"><input type="checkbox" name="blockers" value="不知道有哪些AI工具可以用"><span class="label">不知道有哪些AI工具可以用</span></label>
-          <label class="check-option"><input type="checkbox" name="blockers" value="不知道正确的工作流程"><span class="label">不知道正确的工作流程</span></label>
-          <label class="check-option"><input type="checkbox" name="blockers" value="不知道怎么写Prompt"><span class="label">不知道怎么写Prompt</span></label>
-          <label class="check-option"><input type="checkbox" name="blockers" value="不知道Agent是什么"><span class="label">不知道Agent是什么</span></label>
-          <label class="check-option"><input type="checkbox" name="blockers" value="不知道如何实现自动化"><span class="label">不知道如何实现自动化</span></label>
-          <label class="check-option"><input type="checkbox" name="blockers" value="没时间自己去研究"><span class="label">没时间自己去研究</span></label>
-          <label class="check-option"><input type="checkbox" name="blockers" value="公司有使用限制"><span class="label">公司有使用限制</span></label>
-        </div>
-        <div class="error-msg">请至少选择一个障碍</div>
-      </div>
-    </div>
-
-    <!-- AI成熟度 -->
-    <div class="section" data-section="4">
-      <div class="section-title"><span class="num">4</span> AI能力自评</div>
-      <div class="section-desc">请根据以下标准，选择最符合你当前AI水平的等级。这帮助我们为你推荐合适的学习路径。</div>
-
-      <div class="question" data-field="ai_maturity" data-required="true">
-        <div class="q-label"><span class="required">*</span> 你的AI成熟度等级</div>
-        <div class="maturity-options">
-          <label class="maturity-option">
-            <input type="radio" name="ai_maturity" value="A0">
-            <div class="maturity-card">
-              <div class="maturity-badge">A0</div>
-              <div class="maturity-text">
-                <div class="name">没用过AI</div>
-                <div class="desc">从未在任何工作或生活中使用过AI工具</div>
-              </div>
-            </div>
-          </label>
-          <label class="maturity-option">
-            <input type="radio" name="ai_maturity" value="A1">
-            <div class="maturity-card">
-              <div class="maturity-badge">A1</div>
-              <div class="maturity-text">
-                <div class="name">会聊天</div>
-                <div class="desc">用过ChatGPT等AI对话工具，主要是日常问答</div>
-              </div>
-            </div>
-          </label>
-          <label class="maturity-option">
-            <input type="radio" name="ai_maturity" value="A2">
-            <div class="maturity-card">
-              <div class="maturity-badge">A2</div>
-              <div class="maturity-text">
-                <div class="name">会Prompt</div>
-                <div class="desc">能写出相对精准的提示词，让AI产出可用内容</div>
-              </div>
-            </div>
-          </label>
-          <label class="maturity-option">
-            <input type="radio" name="ai_maturity" value="A3">
-            <div class="maturity-card">
-              <div class="maturity-badge">A3</div>
-              <div class="maturity-text">
-                <div class="name">会多个AI协同</div>
-                <div class="desc">能在工作流中组合使用多个AI工具完成复杂任务</div>
-              </div>
-            </div>
-          </label>
-          <label class="maturity-option">
-            <input type="radio" name="ai_maturity" value="A4">
-            <div class="maturity-card">
-              <div class="maturity-badge">A4</div>
-              <div class="maturity-text">
-                <div class="name">会Agent</div>
-                <div class="desc">能搭建和配置AI智能体处理特定业务场景</div>
-              </div>
-            </div>
-          </label>
-          <label class="maturity-option">
-            <input type="radio" name="ai_maturity" value="A5">
-            <div class="maturity-card">
-              <div class="maturity-badge">A5</div>
-              <div class="maturity-text">
-                <div class="name">已开发AI产品</div>
-                <div class="desc">已经基于AI技术开发了产品或服务</div>
-              </div>
-            </div>
-          </label>
-        </div>
-        <div class="error-msg">请选择你的AI成熟度等级</div>
-      </div>
-    </div>
-
-    <!-- 第四部分：学习需求 -->
-    <div class="section" data-section="5">
-      <div class="section-title"><span class="num">5</span> 学习期望</div>
-      <div class="section-desc">了解你最希望通过AI达到的目标和想深入的方向。</div>
-
-      <div class="question" data-field="desired_outcomes" data-required="true">
-        <div class="q-label"><span class="required">*</span> 你最希望通过AI达到什么结果？</div>
-        <div class="q-hint">可多选</div>
-        <div class="check-group">
-          <label class="check-option"><input type="checkbox" name="desired_outcomes" value="工作效率提升50%以上"><span class="label">工作效率提升50%以上</span></label>
-          <label class="check-option"><input type="checkbox" name="desired_outcomes" value="每天节省2小时以上"><span class="label">每天节省2小时以上</span></label>
-          <label class="check-option"><input type="checkbox" name="desired_outcomes" value="独立完成商业分析"><span class="label">能独立完成商业分析</span></label>
-          <label class="check-option"><input type="checkbox" name="desired_outcomes" value="独立完成PPT和报告"><span class="label">能独立完成PPT和报告</span></label>
-          <label class="check-option"><input type="checkbox" name="desired_outcomes" value="自动完成日报/周报"><span class="label">自动完成日报/周报</span></label>
-          <label class="check-option"><input type="checkbox" name="desired_outcomes" value="自动生成研究报告"><span class="label">自动生成研究报告</span></label>
-          <label class="check-option"><input type="checkbox" name="desired_outcomes" value="做出自己的Agent"><span class="label">做出自己的Agent</span></label>
-          <label class="check-option"><input type="checkbox" name="desired_outcomes" value="做出自己的AI产品"><span class="label">做出自己的AI产品</span></label>
-          <label class="check-option"><input type="checkbox" name="desired_outcomes" value="用AI创业"><span class="label">用AI创业</span></label>
-        </div>
-        <div class="error-msg">请至少选择一个目标</div>
-      </div>
-
-      <div class="question" data-field="learning_directions" data-required="true">
-        <div class="q-label"><span class="required">*</span> 你最想深入学习的方向是？</div>
-        <div class="q-hint">可多选</div>
-        <div class="check-group">
-          <label class="check-option"><input type="checkbox" name="learning_directions" value="AI办公提效"><span class="label">AI办公提效</span></label>
-          <label class="check-option"><input type="checkbox" name="learning_directions" value="AI营销"><span class="label">AI营销</span></label>
-          <label class="check-option"><input type="checkbox" name="learning_directions" value="AI智能体(Agent)"><span class="label">AI智能体 (Agent)</span></label>
-          <label class="check-option"><input type="checkbox" name="learning_directions" value="AI自动化"><span class="label">AI自动化</span></label>
-          <label class="check-option"><input type="checkbox" name="learning_directions" value="AI编程"><span class="label">AI编程</span></label>
-          <label class="check-option"><input type="checkbox" name="learning_directions" value="AI创业"><span class="label">AI创业</span></label>
-          <label class="check-option"><input type="checkbox" name="learning_directions" value="Vibe Coding"><span class="label">Vibe Coding</span></label>
-        </div>
-        <div class="error-msg">请至少选择一个方向</div>
-      </div>
-    </div>
-
-    <!-- 第五部分：商业验证 -->
-    <div class="section" data-section="6">
-      <div class="section-title"><span class="num">6</span> 学习方式与付费偏好</div>
-      <div class="section-desc">帮助我们设计最适合你的学习产品。</div>
-
-      <div class="question" data-field="learning_format" data-required="true">
-        <div class="q-label"><span class="required">*</span> 哪种学习形式最容易让你坚持下来？</div>
-        <div class="radio-group">
-          <label class="radio-option"><input type="radio" name="learning_format" value="线下课堂"><span class="label">线下课堂</span></label>
-          <label class="radio-option"><input type="radio" name="learning_format" value="在线直播课"><span class="label">在线直播课</span></label>
-          <label class="radio-option"><input type="radio" name="learning_format" value="录播视频课"><span class="label">录播视频课</span></label>
-          <label class="radio-option"><input type="radio" name="learning_format" value="学习社群"><span class="label">学习社群</span></label>
-          <label class="radio-option"><input type="radio" name="learning_format" value="一起做项目"><span class="label">一起做项目</span></label>
-          <label class="radio-option"><input type="radio" name="learning_format" value="每周Workshop"><span class="label">每周Workshop</span></label>
-        </div>
-        <div class="error-msg">请选择一种学习形式</div>
-      </div>
-
-      <div class="question" data-field="learning_duration" data-required="true">
-        <div class="q-label"><span class="required">*</span> 你能接受持续多长时间的学习投入？</div>
-        <div class="radio-group">
-          <label class="radio-option"><input type="radio" name="learning_duration" value="一周速成"><span class="label">一周速成</span></label>
-          <label class="radio-option"><input type="radio" name="learning_duration" value="一个月"><span class="label">一个月</span></label>
-          <label class="radio-option"><input type="radio" name="learning_duration" value="三个月"><span class="label">三个月</span></label>
-          <label class="radio-option"><input type="radio" name="learning_duration" value="长期持续"><span class="label">长期持续</span></label>
-        </div>
-        <div class="error-msg">请选择学习时长</div>
-      </div>
-
-      <div class="question" data-field="payment_targets" data-required="true">
-        <div class="q-label"><span class="required">*</span> 你更愿意为什么付费？</div>
-        <div class="q-hint">可多选</div>
-        <div class="check-group">
-          <label class="check-option"><input type="checkbox" name="payment_targets" value="工具推荐/评测"><span class="label">工具推荐/评测</span></label>
-          <label class="check-option"><input type="checkbox" name="payment_targets" value="模板/工作流"><span class="label">模板/工作流</span></label>
-          <label class="check-option"><input type="checkbox" name="payment_targets" value="现成的Agent"><span class="label">现成的Agent</span></label>
-          <label class="check-option"><input type="checkbox" name="payment_targets" value="陪跑服务"><span class="label">陪跑服务</span></label>
-          <label class="check-option"><input type="checkbox" name="payment_targets" value="实战项目"><span class="label">实战项目</span></label>
-          <label class="check-option"><input type="checkbox" name="payment_targets" value="社群/人脉"><span class="label">社群/人脉</span></label>
-        </div>
-        <div class="error-msg">请至少选择一项</div>
-      </div>
-
-      <div class="question" data-field="lookback" data-required="true">
-        <div class="q-label"><span class="required">*</span> 如果半年后你回头看今天，你最希望AI已经帮你完成了哪一件事情？</div>
-        <div class="q-hint">请认真思考后作答，这道题将直接影响我们的产品方向。</div>
-        <textarea name="lookback" class="text-input" placeholder="例如：半年后我希望AI已经能自动帮我处理80%的客户咨询，让我把精力放在核心业务上..." rows="3"></textarea>
-        <div class="error-msg">请填写你的回答</div>
-      </div>
-    </div>
-
-    <!-- 提交 -->
-    <div class="submit-area">
-      <button type="submit" class="btn-submit" id="submitBtn">提交报名表</button>
-    </div>
-  </form>
+  <!-- 表单 (由 JS 动态渲染) -->
+  <form id="surveyForm" novalidate></form>
 
   <!-- 成功页面 -->
   <div class="success-page" id="successPage">
@@ -702,80 +397,481 @@
 
 <script>
 (function() {
-  // 填写端无需关心测试/正式模式，后端自动标记
-  const form = document.getElementById('surveyForm');
-  const successPage = document.getElementById('successPage');
-  const submitBtn = document.getElementById('submitBtn');
-  const progressFill = document.getElementById('progressFill');
-  const totalSections = 6;
 
-  // ====== 多选限制 ======
-  document.querySelectorAll('.check-group[data-max]').forEach(group => {
-    const max = parseInt(group.dataset.max);
-    group.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-      cb.addEventListener('change', function() {
-        const checked = group.querySelectorAll('input[type="checkbox"]:checked');
-        if (checked.length > max) {
-          this.checked = false;
-          // 简单提示
-          const tip = document.createElement('div');
-          tip.textContent = '最多只能选' + max + '项';
-          tip.style.cssText = 'font-size:0.78rem;color:#ef4444;margin-top:0.3rem;';
-          const existing = group.parentElement.querySelector('.max-tip');
-          if (existing) existing.remove();
-          tip.className = 'max-tip';
-          group.after(tip);
-          setTimeout(() => tip.remove(), 2000);
-        }
+  /* ===== 后备配置 (API 不可用时使用) ===== */
+  var FALLBACK_CONFIG = {
+    header: {
+      title: "AI工具课报名报名表",
+      subtitle: "感谢你抽出几分钟时间。你的回答将直接影响我们的课程内容和产品方向，帮助我们为你提供真正有价值的学习方案。",
+      badge: "预计用时 5-8 分钟"
+    },
+    sections: [
+      {
+        title: "基本信息了解",
+        desc: "帮助我们了解你的背景，以便提供更精准的学习方案。",
+        questions: [
+          { id: "name", field: "name", label: "你的姓名", type: "text", required: true, placeholder: "请填写真实姓名" },
+          { id: "enroll_year", field: "enroll_year", label: "你的入学时间", type: "radio", required: true, options: [
+            { value: "2026年", label: "2026年" },
+            { value: "2025年", label: "2025年" },
+            { value: "2024年及以前", label: "2024年及以前" }
+          ]},
+          { id: "identity", field: "identity", label: "你的身份是？", type: "radio", required: true, options: [
+            { value: "企业管理者", label: "企业管理者" },
+            { value: "创业者", label: "创业者" },
+            { value: "职业经理人", label: "职业经理人" },
+            { value: "自由职业", label: "自由职业" },
+            { value: "学生", label: "学生" },
+            { value: "其他", label: "其他" }
+          ]},
+          { id: "industry", field: "industry", label: "你所在的行业是？", type: "text", required: true, placeholder: "例如：互联网、金融、教育、制造、零售、医疗等" },
+          { id: "work_years", field: "work_years", label: "你的工作年限是？", type: "radio", required: true, options: [
+            { value: "<3年", label: "< 3年" },
+            { value: "3~5年", label: "3~5年" },
+            { value: "5~10年", label: "5~10年" },
+            { value: "10年以上", label: "10年以上" }
+          ]}
+        ]
+      },
+      {
+        title: "AI使用现状",
+        desc: "了解你和AI的\"亲密程度\"。",
+        questions: [
+          { id: "daily_ai_time", field: "daily_ai_time", label: "你每天使用AI的时间大约是？", type: "radio", required: true, options: [
+            { value: "不使用", label: "不使用" },
+            { value: "<30分钟", label: "< 30分钟" },
+            { value: "30分钟~1小时", label: "30分钟~1小时" },
+            { value: "1~3小时", label: "1~3小时" },
+            { value: "3小时以上", label: "3小时以上" }
+          ]},
+          { id: "ai_scenarios", field: "ai_scenarios", label: "AI已经进入你的哪些工作场景？", type: "checkbox", required: true, hint: "可多选，选择所有已实际使用AI辅助的场景", options: [
+            { value: "写方案", label: "写方案" },
+            { value: "PPT制作", label: "PPT制作" },
+            { value: "数据分析", label: "数据分析" },
+            { value: "营销内容", label: "营销内容" },
+            { value: "编程开发", label: "编程开发" },
+            { value: "管理决策", label: "管理决策" },
+            { value: "客户服务", label: "客户服务" },
+            { value: "没有真正使用", label: "没有真正使用" }
+          ]}
+        ]
+      },
+      {
+        title: "工作痛点（最重要部分）",
+        desc: "这部分的数据将直接影响我们的课程方向，请认真作答。",
+        questions: [
+          { id: "time_wasters", field: "time_wasters", label: "目前工作中最浪费时间的事情是？", type: "checkbox", required: true, hint: "最多选3项 — 请选出让你感受最深的痛点", max: 3, options: [
+            { value: "写PPT", label: "写PPT" },
+            { value: "写报告/方案", label: "写报告/方案" },
+            { value: "搜集整理资料", label: "搜集整理资料" },
+            { value: "市场分析研究", label: "市场分析研究" },
+            { value: "数据处理", label: "数据处理" },
+            { value: "客户管理", label: "客户管理" },
+            { value: "重复性办公流程", label: "重复性办公流程" },
+            { value: "不知道怎么用AI提效", label: "不知道怎么用AI提效" },
+            { value: "AI回答不稳定", label: "AI回答不稳定、不可靠" },
+            { value: "不会搭建Agent", label: "不会搭建Agent" },
+            { value: "其他", label: "其他" }
+          ]},
+          { id: "most_wanted_one", field: "most_wanted_one", label: "如果AI只能帮你解决一件事，你最希望是什么？", type: "textarea", required: true, hint: "请尽可能具体地描述。这道题的数据将直接影响我们的课程设计。", placeholder: "例如：每天自动生成竞品分析报告、一键完成周报汇总、让AI替我回复常见客户问题...", rows: 3 },
+          { id: "blockers", field: "blockers", label: "为什么这些问题到现在还没有被解决？", type: "checkbox", required: true, hint: "可多选", options: [
+            { value: "不知道有哪些AI工具可以用", label: "不知道有哪些AI工具可以用" },
+            { value: "不知道正确的工作流程", label: "不知道正确的工作流程" },
+            { value: "不知道怎么写Prompt", label: "不知道怎么写Prompt" },
+            { value: "不知道Agent是什么", label: "不知道Agent是什么" },
+            { value: "不知道如何实现自动化", label: "不知道如何实现自动化" },
+            { value: "没时间自己去研究", label: "没时间自己去研究" },
+            { value: "公司有使用限制", label: "公司有使用限制" }
+          ]}
+        ]
+      },
+      {
+        title: "AI能力自评",
+        desc: "请根据以下标准，选择最符合你当前AI水平的等级。这帮助我们为你推荐合适的学习路径。",
+        questions: [
+          { id: "ai_maturity", field: "ai_maturity", label: "你的AI成熟度等级", type: "maturity", required: true, options: [
+            { value: "A0", name: "没用过AI", desc: "从未在任何工作或生活中使用过AI工具" },
+            { value: "A1", name: "会聊天", desc: "用过ChatGPT等AI对话工具，主要是日常问答" },
+            { value: "A2", name: "会Prompt", desc: "能写出相对精准的提示词，让AI产出可用内容" },
+            { value: "A3", name: "会多个AI协同", desc: "能在工作流中组合使用多个AI工具完成复杂任务" },
+            { value: "A4", name: "会Agent", desc: "能搭建和配置AI智能体处理特定业务场景" },
+            { value: "A5", name: "已开发AI产品", desc: "已经基于AI技术开发了产品或服务" }
+          ]}
+        ]
+      },
+      {
+        title: "学习期望",
+        desc: "了解你最希望通过AI达到的目标和想深入的方向。",
+        questions: [
+          { id: "desired_outcomes", field: "desired_outcomes", label: "你最希望通过AI达到什么结果？", type: "checkbox", required: true, hint: "可多选", options: [
+            { value: "工作效率提升50%以上", label: "工作效率提升50%以上" },
+            { value: "每天节省2小时以上", label: "每天节省2小时以上" },
+            { value: "独立完成商业分析", label: "能独立完成商业分析" },
+            { value: "独立完成PPT和报告", label: "能独立完成PPT和报告" },
+            { value: "自动完成日报/周报", label: "自动完成日报/周报" },
+            { value: "自动生成研究报告", label: "自动生成研究报告" },
+            { value: "做出自己的Agent", label: "做出自己的Agent" },
+            { value: "做出自己的AI产品", label: "做出自己的AI产品" },
+            { value: "用AI创业", label: "用AI创业" }
+          ]},
+          { id: "learning_directions", field: "learning_directions", label: "你最想深入学习的方向是？", type: "checkbox", required: true, hint: "可多选", options: [
+            { value: "AI办公提效", label: "AI办公提效" },
+            { value: "AI营销", label: "AI营销" },
+            { value: "AI智能体(Agent)", label: "AI智能体 (Agent)" },
+            { value: "AI自动化", label: "AI自动化" },
+            { value: "AI编程", label: "AI编程" },
+            { value: "AI创业", label: "AI创业" },
+            { value: "Vibe Coding", label: "Vibe Coding" }
+          ]}
+        ]
+      },
+      {
+        title: "学习方式与付费偏好",
+        desc: "帮助我们设计最适合你的学习产品。",
+        questions: [
+          { id: "learning_format", field: "learning_format", label: "哪种学习形式最容易让你坚持下来？", type: "radio", required: true, options: [
+            { value: "线下课堂", label: "线下课堂" },
+            { value: "在线直播课", label: "在线直播课" },
+            { value: "录播视频课", label: "录播视频课" },
+            { value: "学习社群", label: "学习社群" },
+            { value: "一起做项目", label: "一起做项目" },
+            { value: "每周Workshop", label: "每周Workshop" }
+          ]},
+          { id: "learning_duration", field: "learning_duration", label: "你能接受持续多长时间的学习投入？", type: "radio", required: true, options: [
+            { value: "一周速成", label: "一周速成" },
+            { value: "一个月", label: "一个月" },
+            { value: "三个月", label: "三个月" },
+            { value: "长期持续", label: "长期持续" }
+          ]},
+          { id: "payment_targets", field: "payment_targets", label: "你更愿意为什么付费？", type: "checkbox", required: true, hint: "可多选", options: [
+            { value: "工具推荐/评测", label: "工具推荐/评测" },
+            { value: "模板/工作流", label: "模板/工作流" },
+            { value: "现成的Agent", label: "现成的Agent" },
+            { value: "陪跑服务", label: "陪跑服务" },
+            { value: "实战项目", label: "实战项目" },
+            { value: "社群/人脉", label: "社群/人脉" }
+          ]},
+          { id: "lookback", field: "lookback", label: "如果半年后你回头看今天，你最希望AI已经帮你完成了哪一件事情？", type: "textarea", required: true, hint: "请认真思考后作答，这道题将直接影响我们的产品方向。", placeholder: "例如：半年后我希望AI已经能自动帮我处理80%的客户咨询，让我把精力放在核心业务上...", rows: 3 }
+        ]
+      }
+    ]
+  };
+
+  var config = null;
+  var form = document.getElementById('surveyForm');
+  var successPage = document.getElementById('successPage');
+  var formHeader = document.getElementById('formHeader');
+  var progressFill = document.getElementById('progressFill');
+  var totalSections = 0;
+
+  /* ===== 获取配置 ===== */
+  function fetchConfig() {
+    return fetch('/api/form-config')
+      .then(function(res) {
+        if (!res.ok) throw new Error('API returned ' + res.status);
+        return res.json();
+      })
+      .catch(function(err) {
+        console.warn('无法从 /api/form-config 加载配置，使用后备配置。', err);
+        return FALLBACK_CONFIG;
+      });
+  }
+
+  /* ===== 渲染头部 ===== */
+  function renderHeader(h) {
+    formHeader.innerHTML = '';
+    var h1 = document.createElement('h1');
+    h1.textContent = h.title;
+    formHeader.appendChild(h1);
+
+    var p = document.createElement('p');
+    p.textContent = h.subtitle;
+    formHeader.appendChild(p);
+
+    if (h.badge) {
+      var badge = document.createElement('span');
+      badge.className = 'time-badge';
+      badge.textContent = h.badge;
+      formHeader.appendChild(badge);
+    }
+  }
+
+  /* ===== 构建单个问题 DOM ===== */
+  function buildQuestion(q, sectionIndex) {
+    var div = document.createElement('div');
+    div.className = 'question';
+    div.dataset.field = q.field;
+    div.dataset.type = q.type;
+    if (q.required) div.dataset.required = 'true';
+
+    // 标签
+    var labelDiv = document.createElement('div');
+    labelDiv.className = 'q-label';
+    if (q.required) {
+      var star = document.createElement('span');
+      star.className = 'required';
+      star.textContent = '*';
+      labelDiv.appendChild(star);
+    }
+    labelDiv.appendChild(document.createTextNode(' ' + q.label));
+    div.appendChild(labelDiv);
+
+    // 提示
+    if (q.hint) {
+      var hintDiv = document.createElement('div');
+      hintDiv.className = 'q-hint';
+      hintDiv.textContent = q.hint;
+      div.appendChild(hintDiv);
+    }
+
+    // 根据类型构建输入区域
+    var nameAttr = q.field;
+    switch (q.type) {
+      case 'text':
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.name = nameAttr;
+        input.className = 'text-input';
+        if (q.placeholder) input.placeholder = q.placeholder;
+        div.appendChild(input);
+        break;
+
+      case 'textarea':
+        var textarea = document.createElement('textarea');
+        textarea.name = nameAttr;
+        textarea.className = 'text-input';
+        if (q.placeholder) textarea.placeholder = q.placeholder;
+        if (q.rows) textarea.rows = q.rows;
+        div.appendChild(textarea);
+        break;
+
+      case 'radio':
+        var radioGroup = document.createElement('div');
+        radioGroup.className = 'radio-group';
+        (q.options || []).forEach(function(opt) {
+          var label = document.createElement('label');
+          label.className = 'radio-option';
+          var radio = document.createElement('input');
+          radio.type = 'radio';
+          radio.name = nameAttr;
+          radio.value = opt.value;
+          label.appendChild(radio);
+          var span = document.createElement('span');
+          span.className = 'label';
+          span.textContent = opt.label;
+          label.appendChild(span);
+          radioGroup.appendChild(label);
+        });
+        div.appendChild(radioGroup);
+        break;
+
+      case 'checkbox':
+        var checkGroup = document.createElement('div');
+        checkGroup.className = 'check-group';
+        if (q.max) checkGroup.dataset.max = q.max;
+        (q.options || []).forEach(function(opt) {
+          var label = document.createElement('label');
+          label.className = 'check-option';
+          var cb = document.createElement('input');
+          cb.type = 'checkbox';
+          cb.name = nameAttr;
+          cb.value = opt.value;
+          label.appendChild(cb);
+          var span = document.createElement('span');
+          span.className = 'label';
+          span.textContent = opt.label;
+          label.appendChild(span);
+          checkGroup.appendChild(label);
+        });
+        div.appendChild(checkGroup);
+        break;
+
+      case 'maturity':
+        var maturityOptions = document.createElement('div');
+        maturityOptions.className = 'maturity-options';
+        (q.options || []).forEach(function(opt) {
+          var label = document.createElement('label');
+          label.className = 'maturity-option';
+          var radio = document.createElement('input');
+          radio.type = 'radio';
+          radio.name = nameAttr;
+          radio.value = opt.value;
+          label.appendChild(radio);
+
+          var card = document.createElement('div');
+          card.className = 'maturity-card';
+
+          var badge = document.createElement('div');
+          badge.className = 'maturity-badge';
+          badge.textContent = opt.value;
+          card.appendChild(badge);
+
+          var text = document.createElement('div');
+          text.className = 'maturity-text';
+
+          var nameDiv = document.createElement('div');
+          nameDiv.className = 'name';
+          nameDiv.textContent = opt.name;
+          text.appendChild(nameDiv);
+
+          var descDiv = document.createElement('div');
+          descDiv.className = 'desc';
+          descDiv.textContent = opt.desc;
+          text.appendChild(descDiv);
+
+          card.appendChild(text);
+          label.appendChild(card);
+          maturityOptions.appendChild(label);
+        });
+        div.appendChild(maturityOptions);
+        break;
+    }
+
+    // 错误信息
+    var errorMsg = document.createElement('div');
+    errorMsg.className = 'error-msg';
+    errorMsg.textContent = q.required ? ('请' + (q.type === 'radio' || q.type === 'maturity' ? '选择' : (q.type === 'checkbox' ? '至少选择一项' : '填写')) + (q.label.length > 10 ? q.label.substring(0, 10) + '...' : q.label)) : '';
+    div.appendChild(errorMsg);
+
+    return div;
+  }
+
+  /* ===== 构建整个表单 ===== */
+  function buildForm(cfg) {
+    config = cfg;
+    form.innerHTML = '';
+
+    // 渲染头部
+    renderHeader(cfg.header);
+
+    totalSections = cfg.sections.length;
+
+    cfg.sections.forEach(function(sec, idx) {
+      var sectionDiv = document.createElement('div');
+      sectionDiv.className = 'section';
+      sectionDiv.dataset.section = idx + 1;
+
+      // 标题
+      var titleDiv = document.createElement('div');
+      titleDiv.className = 'section-title';
+      var numSpan = document.createElement('span');
+      numSpan.className = 'num';
+      numSpan.textContent = idx + 1;
+      titleDiv.appendChild(numSpan);
+      titleDiv.appendChild(document.createTextNode(' ' + sec.title));
+      sectionDiv.appendChild(titleDiv);
+
+      // 描述
+      if (sec.desc) {
+        var descDiv = document.createElement('div');
+        descDiv.className = 'section-desc';
+        descDiv.textContent = sec.desc;
+        sectionDiv.appendChild(descDiv);
+      }
+
+      // 问题
+      sec.questions.forEach(function(q) {
+        sectionDiv.appendChild(buildQuestion(q, idx));
+      });
+
+      form.appendChild(sectionDiv);
+    });
+
+    // 提交按钮区域
+    var submitArea = document.createElement('div');
+    submitArea.className = 'submit-area';
+    var submitBtn = document.createElement('button');
+    submitBtn.type = 'submit';
+    submitBtn.className = 'btn-submit';
+    submitBtn.id = 'submitBtn';
+    submitBtn.textContent = '提交报名表';
+    submitArea.appendChild(submitBtn);
+    form.appendChild(submitArea);
+
+    // 绑定多选限制事件
+    bindMultiSelectLimits();
+
+    // 绑定事件用于进度条
+    form.addEventListener('change', updateProgress);
+    form.addEventListener('input', updateProgress);
+    updateProgress();
+
+    // 绑定提交事件
+    form.addEventListener('submit', handleSubmit);
+  }
+
+  /* ===== 多选限制 ===== */
+  function bindMultiSelectLimits() {
+    form.querySelectorAll('.check-group[data-max]').forEach(function(group) {
+      var max = parseInt(group.dataset.max);
+      group.querySelectorAll('input[type="checkbox"]').forEach(function(cb) {
+        cb.addEventListener('change', function() {
+          var checked = group.querySelectorAll('input[type="checkbox"]:checked');
+          if (checked.length > max) {
+            cb.checked = false;
+            var tip = document.createElement('div');
+            tip.textContent = '最多只能选' + max + '项';
+            tip.style.cssText = 'font-size:0.78rem;color:#ef4444;margin-top:0.3rem;';
+            var existing = group.parentElement.querySelector('.max-tip');
+            if (existing) existing.remove();
+            tip.className = 'max-tip';
+            group.after(tip);
+            setTimeout(function() { tip.remove(); }, 2000);
+          }
+        });
       });
     });
-  });
+  }
 
-  // ====== 进度条 ======
+  /* ===== 进度条更新 ===== */
   function updateProgress() {
-    const sections = document.querySelectorAll('.section');
-    let filled = 0;
-    sections.forEach(s => {
-      const questions = s.querySelectorAll('.question[data-required="true"]');
-      let sectionDone = true;
-      questions.forEach(q => {
-        const field = q.dataset.field;
-        if (q.querySelector('input[type="radio"]:checked') ||
-            q.querySelector('input[type="checkbox"]:checked') ||
-            q.querySelector('textarea')?.value.trim() ||
-            q.querySelector('input[type="text"]')?.value.trim()) {
-          // ok
-        } else {
-          sectionDone = false;
+    var sections = form.querySelectorAll('.section');
+    var filled = 0;
+    sections.forEach(function(s) {
+      var questions = s.querySelectorAll('.question[data-required="true"]');
+      var sectionDone = true;
+      questions.forEach(function(q) {
+        var type = q.dataset.type;
+        var filled = false;
+        if (type === 'radio' || type === 'maturity') {
+          filled = !!q.querySelector('input[type="radio"]:checked');
+        } else if (type === 'checkbox') {
+          filled = q.querySelectorAll('input[type="checkbox"]:checked').length > 0;
+        } else if (type === 'text') {
+          var input = q.querySelector('input[type="text"]');
+          filled = input && input.value.trim().length > 0;
+        } else if (type === 'textarea') {
+          var textarea = q.querySelector('textarea');
+          filled = textarea && textarea.value.trim().length > 0;
         }
+        if (!filled) sectionDone = false;
       });
       if (sectionDone) filled++;
     });
-    const pct = Math.round((filled / totalSections) * 100);
+    var pct = totalSections > 0 ? Math.round((filled / totalSections) * 100) : 0;
     progressFill.style.width = pct + '%';
   }
 
-  form.addEventListener('change', updateProgress);
-  form.addEventListener('input', updateProgress);
-
-  // ====== 表单验证 ======
+  /* ===== 表单验证 ===== */
   function validate() {
-    let valid = true;
-    let firstError = null;
+    var valid = true;
+    var firstError = null;
 
-    document.querySelectorAll('.question[data-required="true"]').forEach(q => {
+    form.querySelectorAll('.question[data-required="true"]').forEach(function(q) {
       q.classList.remove('error');
-      const field = q.dataset.field;
+      var type = q.dataset.type;
+      var filled = false;
 
-      let filled = false;
-      if (q.querySelector('input[type="radio"]')) {
+      if (type === 'radio' || type === 'maturity') {
         filled = !!q.querySelector('input[type="radio"]:checked');
-      } else if (q.querySelector('input[type="checkbox"]')) {
+      } else if (type === 'checkbox') {
         filled = q.querySelectorAll('input[type="checkbox"]:checked').length > 0;
-      } else if (q.querySelector('textarea')) {
-        filled = q.querySelector('textarea').value.trim().length > 0;
-      } else if (q.querySelector('input[type="text"]')) {
-        filled = q.querySelector('input[type="text"]').value.trim().length > 0;
+      } else if (type === 'text') {
+        var input = q.querySelector('input[type="text"]');
+        filled = input && input.value.trim().length > 0;
+      } else if (type === 'textarea') {
+        var textarea = q.querySelector('textarea');
+        filled = textarea && textarea.value.trim().length > 0;
       }
 
       if (!filled) {
@@ -791,46 +887,52 @@
     return valid;
   }
 
-  // ====== 收集数据 ======
+  /* ===== 收集数据 ===== */
   function collectData() {
-    const data = {};
+    var data = {};
 
-    // 单选
-    const radioFields = ['enroll_year', 'identity', 'work_years', 'daily_ai_time', 'ai_maturity', 'learning_format', 'learning_duration'];
-    radioFields.forEach(f => {
-      const checked = form.querySelector(`input[name="${f}"]:checked`);
-      data[f] = checked ? checked.value : null;
+    // 附加表单头部信息
+    if (config && config.header) {
+      data.form_title = config.header.title || '';
+      data.form_subtitle = config.header.subtitle || '';
+    }
+
+    form.querySelectorAll('.question').forEach(function(q) {
+      var field = q.dataset.field;
+      var type = q.dataset.type;
+
+      if (type === 'radio' || type === 'maturity') {
+        var checked = q.querySelector('input[type="radio"]:checked');
+        data[field] = checked ? checked.value : null;
+      } else if (type === 'checkbox') {
+        var checkedAll = q.querySelectorAll('input[type="checkbox"]:checked');
+        data[field] = Array.from(checkedAll).map(function(c) { return c.value; });
+      } else if (type === 'text') {
+        var input = q.querySelector('input[type="text"]');
+        data[field] = input ? input.value.trim() || null : null;
+      } else if (type === 'textarea') {
+        var textarea = q.querySelector('textarea');
+        data[field] = textarea ? textarea.value.trim() || null : null;
+      }
     });
-
-    // 多选
-    const checkFields = ['ai_scenarios', 'time_wasters', 'blockers', 'desired_outcomes', 'learning_directions', 'payment_targets'];
-    checkFields.forEach(f => {
-      const checked = form.querySelectorAll(`input[name="${f}"]:checked`);
-      data[f] = Array.from(checked).map(c => c.value);
-    });
-
-    // 文本
-    data.name = form.querySelector('input[name="name"]').value.trim() || null;
-    data.industry = form.querySelector('input[name="industry"]').value.trim() || null;
-    data.most_wanted_one = form.querySelector('textarea[name="most_wanted_one"]').value.trim() || null;
-    data.lookback = form.querySelector('textarea[name="lookback"]').value.trim() || null;
 
     return data;
   }
 
-  // ====== 提交 ======
-  form.addEventListener('submit', async function(e) {
+  /* ===== 提交处理 ===== */
+  function handleSubmit(e) {
     e.preventDefault();
 
     if (!validate()) return;
 
+    var submitBtn = document.getElementById('submitBtn');
     submitBtn.disabled = true;
     submitBtn.textContent = '提交中...';
 
-    const data = collectData();
+    var data = collectData();
 
-    // 带上用户本地时间，确保时区正确
-    const now = new Date();
+    // 带上用户本地时间
+    var now = new Date();
     data.submitted_at = now.getFullYear() + '-' +
       String(now.getMonth()+1).padStart(2,'0') + '-' +
       String(now.getDate()).padStart(2,'0') + ' ' +
@@ -838,17 +940,16 @@
       String(now.getMinutes()).padStart(2,'0') + ':' +
       String(now.getSeconds()).padStart(2,'0');
 
-    try {
-      const res = await fetch('/api/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      const result = await res.json();
-
+    fetch('/api/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(result) {
       if (result.success) {
         form.style.display = 'none';
-        document.getElementById('formHeader').style.display = 'none';
+        formHeader.style.display = 'none';
         successPage.style.display = 'block';
         progressFill.style.width = '100%';
       } else {
@@ -856,15 +957,19 @@
         submitBtn.disabled = false;
         submitBtn.textContent = '提交报名表';
       }
-    } catch (err) {
+    })
+    .catch(function() {
       alert('网络错误，请检查网络后重试。');
       submitBtn.disabled = false;
       submitBtn.textContent = '提交报名表';
-    }
+    });
+  }
+
+  /* ===== 启动 ===== */
+  fetchConfig().then(function(cfg) {
+    buildForm(cfg);
   });
 
-  // 初始化进度
-  updateProgress();
 })();
 </script>
 
