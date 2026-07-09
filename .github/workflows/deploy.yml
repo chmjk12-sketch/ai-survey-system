@@ -50,7 +50,7 @@ jobs:
               --image ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}/${{ env.APP_NAME }}:${{ github.sha }} \
               --port ${{ env.APP_PORT }} \
               --internal-port 80 \
-              --health-path /
+              --health-path /               --volumes "-v /opt/app/ai-survey-system-data:/app/data"
 
       - name: Deploy via RunCommand API (fallback)
         if: steps.ssh-deploy.conclusion == 'failure'
