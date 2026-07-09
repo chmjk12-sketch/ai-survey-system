@@ -40,7 +40,7 @@ if (!fs.existsSync(CONFIG_FILE)) {
 let systemConfig = loadConfig();
 
 // ====== 数据库初始化 ======
-const db = new Database(path.join(__dirname, 'survey.db'));
+const db = new Database(path.join(__dirname, 'data', 'survey.db'));
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS responses (
