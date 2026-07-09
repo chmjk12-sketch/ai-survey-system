@@ -226,7 +226,15 @@ app.get('/api/stats', (req, res) => {
       const counts = {};
       for (const row of rows) {
         let items = [];
-        try { items = JSON.parse(row[field] || '[]'); } catch(e) { continue; }
+        try {
+          const raw = row[field] || '[]';
+          const parsed = JSON.parse(raw);
+          items = Array.isArray(parsed) ? parsed : [parsed];
+        } catch(e) {
+          // 旧数据可能是纯文本，按单值处理
+          if (row[field] && row[field].trim()) items = [row[field].trim()];
+          else continue;
+        }
         for (const item of items) {
           counts[item] = (counts[item] || 0) + 1;
         }
