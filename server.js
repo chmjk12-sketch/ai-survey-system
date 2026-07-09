@@ -159,7 +159,7 @@ app.post('/api/submit', (req, res) => {
       data.ai_maturity || null,
       JSON.stringify(data.desired_outcomes || []),
       JSON.stringify(data.learning_directions || []),
-      data.learning_format || null,
+      JSON.stringify(data.learning_format || []),
       data.learning_duration || null,
       JSON.stringify(data.payment_targets || []),
       data.lookback || null,
