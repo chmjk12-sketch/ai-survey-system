@@ -1,0 +1,80 @@
+{
+  "theme": {
+    "accent": "#4f46e5",
+    "accentLight": "#eef2ff",
+    "accentHover": "#4338ca"
+  },
+  "header": {
+    "title": "AI工具课报名表",
+    "subtitle": "感谢你抽出几分钟时间。你的回答将直接影响我们的课程内容和产品方向，帮助我们为你提供真正有价值的学习方案。",
+    "timeBadge": "预计用时 5-8 分钟"
+  },
+  "sections": [
+    {
+      "id": 1,
+      "title": "基本信息了解",
+      "desc": "帮助我们了解你的背景，以便提供更精准的学习方案。",
+      "questions": [
+        {"field":"name","type":"text","label":"你的姓名","required":true,"placeholder":"请填写真实姓名","errorMsg":"请填写姓名"},
+        {"field":"enroll_year","type":"radio","label":"你的入学时间","required":true,"errorMsg":"请选择入学时间","options":[{"value":"2026年","label":"2026年"},{"value":"2025年","label":"2025年"},{"value":"2024年及以前","label":"2024年及以前"}]},
+        {"field":"identity","type":"radio","label":"你的身份是？","required":true,"errorMsg":"请选择你的身份","options":[{"value":"企业管理者","label":"企业管理者"},{"value":"创业者","label":"创业者"},{"value":"职业经理人","label":"职业经理人"},{"value":"自由职业","label":"自由职业"},{"value":"学生","label":"学生"},{"value":"其他","label":"其他"}]},
+        {"field":"industry","type":"text","label":"你所在的行业是？","required":true,"placeholder":"例如：互联网、金融、教育、制造、零售、医疗等","errorMsg":"请填写你所在的行业"},
+        {"field":"work_years","type":"radio","label":"你的工作年限是？","required":true,"errorMsg":"请选择你的工作年限","options":[{"value":"<3年","label":"< 3年"},{"value":"3~5年","label":"3~5年"},{"value":"5~10年","label":"5~10年"},{"value":"10年以上","label":"10年以上"}]}
+      ]
+    },
+    {
+      "id": 2,
+      "title": "AI使用现状",
+      "desc": "了解你目前对AI工具的使用情况，帮助我们定位你的起点。",
+      "questions": [
+        {"field":"daily_ai_time","type":"radio","label":"你每天使用AI工具的时间是？","required":true,"errorMsg":"请选择使用时长","options":[{"value":"没用过","label":"没用过"},{"value":"<30分钟","label":"<30分钟"},{"value":"30分钟~1小时","label":"30分钟~1小时"},{"value":"1~2小时","label":"1~2小时"},{"value":"2小时以上","label":"2小时以上"}]},
+        {"field":"ai_scenarios","type":"checkbox","label":"你主要在哪些场景使用AI？","required":true,"hint":"可多选","errorMsg":"请至少选择一个场景","options":[{"value":"写文案","label":"写文案"},{"value":"数据分析","label":"数据分析"},{"value":"营销内容","label":"营销内容"},{"value":"编程开发","label":"编程开发"},{"value":"管理决策","label":"管理决策"},{"value":"客户服务","label":"客户服务"},{"value":"没有真正使用","label":"没有真正使用"}]}
+      ]
+    },
+    {
+      "id": 3,
+      "title": "工作痛点（最重要部分）",
+      "desc": "这部分的数据将直接影响我们的课程方向，请认真作答。",
+      "questions": [
+        {"field":"time_wasters","type":"checkbox","label":"目前工作中最浪费时间的事情是？","required":true,"hint":"最多选3项 — 请选出让你感受最深的痛点","errorMsg":"请至少选择一项，最多3项","max":3,"options":[{"value":"写PPT","label":"写PPT"},{"value":"写报告/方案","label":"写报告/方案"},{"value":"搜集整理资料","label":"搜集整理资料"},{"value":"市场分析研究","label":"市场分析研究"},{"value":"数据处理","label":"数据处理"},{"value":"客户管理","label":"客户管理"},{"value":"重复性办公流程","label":"重复性办公流程"},{"value":"不知道怎么用AI提效","label":"不知道怎么用AI提效"},{"value":"AI回答不稳定","label":"AI回答不稳定、不可靠"},{"value":"不会搭建Agent","label":"不会搭建Agent"},{"value":"其他","label":"其他"}]},
+        {"field":"most_wanted_one","type":"textarea","label":"如果AI只能帮你解决一件事，你最希望是什么？","required":true,"hint":"请尽可能具体地描述。这道题的数据将直接影响我们的课程设计。","placeholder":"例如：每天自动生成竞品分析报告、一键完成周报汇总、让AI替我回复常见客户问题...","errorMsg":"请填写你的回答，这对我们非常重要"},
+        {"field":"blockers","type":"checkbox","label":"为什么这些问题到现在还没有被解决？","required":true,"hint":"可多选","errorMsg":"请至少选择一个障碍","options":[{"value":"不知道有哪些AI工具可以用","label":"不知道有哪些AI工具可以用"},{"value":"不知道正确的工作流程","label":"不知道正确的工作流程"},{"value":"不知道怎么写Prompt","label":"不知道怎么写Prompt"},{"value":"不知道Agent是什么","label":"不知道Agent是什么"},{"value":"不知道如何实现自动化","label":"不知道如何实现自动化"},{"value":"没时间自己去研究","label":"没时间自己去研究"},{"value":"公司有使用限制","label":"公司有使用限制"}]}
+      ]
+    },
+    {
+      "id": 4,
+      "title": "AI能力自评",
+      "desc": "请根据以下标准，选择最符合你当前AI水平的等级。这帮助我们为你推荐合适的学习路径。",
+      "questions": [
+        {"field":"ai_maturity","type":"maturity","label":"你的AI成熟度等级","required":true,"errorMsg":"请选择你的AI成熟度等级","options":[
+          {"value":"A0","label":"没用过AI","desc":"从未在任何工作或生活中使用过AI工具"},
+          {"value":"A1","label":"会聊天","desc":"用过ChatGPT等AI对话工具，主要是日常问答"},
+          {"value":"A2","label":"会Prompt","desc":"能写出相对精准的提示词，让AI产出可用内容"},
+          {"value":"A3","label":"会多个AI协同","desc":"能在工作流中组合使用多个AI工具完成复杂任务"},
+          {"value":"A4","label":"会Agent","desc":"能搭建和配置AI智能体处理特定业务场景"},
+          {"value":"A5","label":"已开发AI产品","desc":"已经基于AI技术开发了产品或服务"}
+        ]}
+      ]
+    },
+    {
+      "id": 5,
+      "title": "学习期望",
+      "desc": "了解你最希望通过AI达到的目标和想深入的方向。",
+      "questions": [
+        {"field":"desired_outcomes","type":"checkbox","label":"你最希望通过AI达到什么结果？","required":true,"hint":"可多选","errorMsg":"请至少选择一个目标","options":[{"value":"工作效率提升50%以上","label":"工作效率提升50%以上"},{"value":"每天节省2小时以上","label":"每天节省2小时以上"},{"value":"独立完成商业分析","label":"能独立完成商业分析"},{"value":"独立完成PPT和报告","label":"能独立完成PPT和报告"},{"value":"自动完成日报/周报","label":"自动完成日报/周报"},{"value":"自动生成研究报告","label":"自动生成研究报告"},{"value":"做出自己的Agent","label":"做出自己的Agent"},{"value":"做出自己的AI产品","label":"做出自己的AI产品"},{"value":"用AI创业","label":"用AI创业"}]},
+        {"field":"learning_directions","type":"checkbox","label":"你最想深入学习的方向是？","required":true,"hint":"可多选","errorMsg":"请至少选择一个方向","options":[{"value":"AI办公提效","label":"AI办公提效"},{"value":"AI营销","label":"AI营销"},{"value":"AI智能体(Agent)","label":"AI智能体 (Agent)"},{"value":"AI自动化","label":"AI自动化"},{"value":"AI编程","label":"AI编程"},{"value":"AI创业","label":"AI创业"},{"value":"Vibe Coding","label":"Vibe Coding"}]}
+      ]
+    },
+    {
+      "id": 6,
+      "title": "学习方式与付费偏好",
+      "desc": "帮助我们设计最适合你的学习产品。",
+      "questions": [
+        {"field":"learning_format","type":"radio","label":"哪种学习形式最容易让你坚持下来？","required":true,"errorMsg":"请选择一种学习形式","options":[{"value":"线下课堂","label":"线下课堂"},{"value":"在线直播课","label":"在线直播课"},{"value":"录播视频课","label":"录播视频课"},{"value":"学习社群","label":"学习社群"},{"value":"一起做项目","label":"一起做项目"},{"value":"每周Workshop","label":"每周Workshop"}]},
+        {"field":"learning_duration","type":"radio","label":"你能接受持续多长时间的学习投入？","required":true,"errorMsg":"请选择学习时长","options":[{"value":"一周速成","label":"一周速成"},{"value":"一个月","label":"一个月"},{"value":"三个月","label":"三个月"},{"value":"长期持续","label":"长期持续"}]},
+        {"field":"payment_targets","type":"checkbox","label":"你更愿意为什么付费？","required":true,"hint":"可多选","errorMsg":"请至少选择一项","options":[{"value":"工具推荐/评测","label":"工具推荐/评测"},{"value":"模板/工作流","label":"模板/工作流"},{"value":"现成的Agent","label":"现成的Agent"},{"value":"陪跑服务","label":"陪跑服务"},{"value":"实战项目","label":"实战项目"},{"value":"社群/人脉","label":"社群/人脉"}]},
+        {"field":"lookback","type":"textarea","label":"如果半年后你回头看今天，你最希望AI已经帮你完成了哪一件事情？","required":true,"hint":"请认真思考后作答，这道题将直接影响我们的产品方向。","placeholder":"例如：半年后我希望AI已经能自动帮我处理80%的客户咨询，让我把精力放在核心业务上...","errorMsg":"请填写你的回答"}
+      ]
+    }
+  ]
+}
