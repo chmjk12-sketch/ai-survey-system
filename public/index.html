@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI培训需求调研</title>
+  <title>AI工具课报名</title>
   <style>
     :root {
       --bg: #f7f8fc;
@@ -377,12 +377,12 @@
 
   <!-- ===== 头部 ===== -->
   <div class="header" id="formHeader">
-    <h1>AI培训需求调研问卷</h1>
+    <h1>AI工具课报名报名表</h1>
     <p>感谢你抽出几分钟时间。你的回答将直接影响我们的课程内容和产品方向，帮助我们为你提供真正有价值的学习方案。</p>
     <span class="time-badge">预计用时 5-8 分钟</span>
   </div>
 
-  <!-- ===== 问卷表单 ===== -->
+  <!-- ===== 报名表表单 ===== -->
   <form id="surveyForm" novalidate>
 
     <!-- 第一部分：用户画像 -->
@@ -682,7 +682,7 @@
 
     <!-- 提交 -->
     <div class="submit-area">
-      <button type="submit" class="btn-submit" id="submitBtn">提交问卷</button>
+      <button type="submit" class="btn-submit" id="submitBtn">提交报名表</button>
     </div>
   </form>
 
@@ -854,12 +854,12 @@
       } else {
         alert('提交失败，请稍后重试：' + (result.error || ''));
         submitBtn.disabled = false;
-        submitBtn.textContent = '提交问卷';
+        submitBtn.textContent = '提交报名表';
       }
     } catch (err) {
       alert('网络错误，请检查网络后重试。');
       submitBtn.disabled = false;
-      submitBtn.textContent = '提交问卷';
+      submitBtn.textContent = '提交报名表';
     }
   });
 
